@@ -23,8 +23,6 @@ namespace DataBase.EF.ConnectionFroWine.DbContexts
 
         public DbSet<WineUser> WineUsers { get; set; } = null!;
 
-        public DbSet<WineAdministrator> WineAdministrators { get; set; } = null!;
-
         public DbSet<DifferenceAreometrDefaultValue> DifferenceAreometrDefaultValues { get; set; } = null!;
 
         public WineDbContext()
@@ -37,6 +35,11 @@ namespace DataBase.EF.ConnectionFroWine.DbContexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=WIWDB;Username=postgres;Password=1749;");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.UseSerialColumns();
         }
     }
 }

@@ -1,6 +1,8 @@
 using DataBase.EF.ConnectionFroWine.DbContexts;
 using IdentityServer4.AccessTokenValidation;
 using WebApp.Extensions;
+using WebApp.Services.Account;
+using WebApp.Services.Account.Abstract;
 
 namespace Backend.WebApp
 {
@@ -26,7 +28,7 @@ namespace Backend.WebApp
             .AddIdentityServerAuthentication(options =>
             {
                 options.Authority = "https://localhost:5001";
-                options.RequireHttpsMetadata = false;       
+                options.RequireHttpsMetadata = false;
                 options.ApiName = "AlcoMetrics.Wine.Backend";
                 options.ApiSecret = "secre_#$forWineApi17782_ahseasd2_$231zmnkmtslaf12&&/";
             });
@@ -34,6 +36,7 @@ namespace Backend.WebApp
             builder.Services.AddControllers();
 
             builder.AddWineCoreServices();
+            builder.Services.AddTransient<IAccountService, AccountService>();
 
             var app = builder.Build();
 
