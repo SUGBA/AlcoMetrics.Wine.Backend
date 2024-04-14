@@ -27,4 +27,5 @@ namespace Core.Models.Abstractions
         /// </summary>
         public TE UserRole { get; set; }
     }
+
 }

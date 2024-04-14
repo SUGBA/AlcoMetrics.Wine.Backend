@@ -27,7 +27,7 @@ namespace Backend.WebApp
             {
                 options.Authority = "https://localhost:5001";
                 options.RequireHttpsMetadata = false;       
-                options.ApiName = "WineApi";
+                options.ApiName = "AlcoMetrics.Wine.Backend";
                 options.ApiSecret = "secre_#$forWineApi17782_ahseasd2_$231zmnkmtslaf12&&/";
             });
 
