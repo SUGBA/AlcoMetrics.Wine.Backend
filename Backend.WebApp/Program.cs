@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using DataBase.EF.ConnectionFroWine.DbContexts;
 using IdentityServer4.AccessTokenValidation;
 using WebApp.Extensions;
@@ -31,6 +32,7 @@ namespace Backend.WebApp
                 options.RequireHttpsMetadata = false;
                 options.ApiName = "AlcoMetrics.Wine.Backend";
                 options.ApiSecret = "secre_#$forWineApi17782_ahseasd2_$231zmnkmtslaf12&&/";
+                options.RoleClaimType = ClaimTypes.Role;
             });
 
             builder.Services.AddControllers();
