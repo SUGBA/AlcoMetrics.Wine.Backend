@@ -23,12 +23,12 @@ namespace WebApp.Services.Account
         /// <param name="login"> Логин </param>
         /// <param name="password"> Пароль </param>
         /// <returns></returns>
-        public Task RegisterAsync(string? login, string? password)
+        public async Task<bool> RegisterAsync(string? login, string? password)
         {
             if (login == null || password == null)
-                return Task.CompletedTask;
+                return false;
 
-            return Task.Run(() => Register(login, password));
+            return await Task.Run(() => Register(login, password));
         }
 
         /// <summary>
@@ -37,11 +37,12 @@ namespace WebApp.Services.Account
         /// <param name="login"> Логин </param>
         /// <param name="password"> Пароль </param>
         /// <returns></returns>
-        private void Register(string login, string password)
+        private bool Register(string login, string password)
         {
-            var user = new WineUser() { Login = login, Password = password};
+            var user = new WineUser() { Login = login, Password = password };
             _repository.Add(user);
             _repository.SaveChanges();
+            return true;
         }
     }
 }

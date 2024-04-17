@@ -20,12 +20,12 @@ namespace WebApp.Controllers
         /// <summary>
         /// Зарегестрировать пользователя
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model"> Модель для регистрации пользователя </param>
         /// <returns></returns>
         [HttpPost("Register")]
-        public async Task Register([FromBody] RegisterViewModel model)
+        public async Task<bool> Register([FromBody] RegisterViewModel model)
         {
-            await _accountService.RegisterAsync(model.Login, model.Password);
+            return await _accountService.RegisterAsync(model.Login, model.Password);
         }
     }
 }
