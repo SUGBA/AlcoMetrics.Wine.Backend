@@ -11,6 +11,6 @@
         /// <param name="login"> Логин </param>
         /// <param name="password"> Пароль </param>
         /// <returns></returns>
-        Task<bool> RegisterAsync(string? login, string? password);
+        Task<bool> RegisterAsync(string? login, string? password, int? id);
     }
 }

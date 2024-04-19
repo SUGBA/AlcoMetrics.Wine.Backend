@@ -18,5 +18,11 @@ namespace WebApp.Models.Request.Account
         /// </summary>
         [JsonPropertyName("Password")]
         public string? Password { get; set; }
+
+        /// <summary>
+        /// Идентификатор пользователя
+        /// </summary>
+        [JsonPropertyName("UserId")]
+        public int? UserId { get; set; }
     }
 }

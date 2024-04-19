@@ -1,5 +1,4 @@
 ﻿using Core.Actions.Abstractions.DataBaseConnector;
-using Core.Models.Abstractions;
 using Core.Models.WineRealizations;
 using WebApp.Services.Account.Abstract;
 
@@ -23,12 +22,12 @@ namespace WebApp.Services.Account
         /// <param name="login"> Логин </param>
         /// <param name="password"> Пароль </param>
         /// <returns></returns>
-        public async Task<bool> RegisterAsync(string? login, string? password)
+        public async Task<bool> RegisterAsync(string? login, string? password, int? id)
         {
-            if (login == null || password == null)
+            if (login == null || password == null || id == null)
                 return false;
 
-            return await Task.Run(() => Register(login, password));
+            return await Task.Run(() => Register(login, password, (int)id));
         }
 
         /// <summary>
@@ -37,9 +36,9 @@ namespace WebApp.Services.Account
         /// <param name="login"> Логин </param>
         /// <param name="password"> Пароль </param>
         /// <returns></returns>
-        private bool Register(string login, string password)
+        private bool Register(string login, string password, int id)
         {
-            var user = new WineUser() { Login = login, Password = password };
+            var user = new WineUser() { Login = login, Password = password, Id = id};
             _repository.Add(user);
             _repository.SaveChanges();
             return true;

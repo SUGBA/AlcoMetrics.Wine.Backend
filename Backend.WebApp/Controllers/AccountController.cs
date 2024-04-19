@@ -25,7 +25,7 @@ namespace WebApp.Controllers
         [HttpPost("Register")]
         public async Task<bool> Register([FromBody] RegisterViewModel model)
         {
-            return await _accountService.RegisterAsync(model.Login, model.Password);
+            return await _accountService.RegisterAsync(model.Login, model.Password, model.UserId);
         }
     }
 }
