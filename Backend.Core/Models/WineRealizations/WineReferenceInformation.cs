@@ -1,8 +1,9 @@
-﻿using Core.Models.Abstractions;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Core.Models.Abstractions;
 
 namespace Core.Models.WineRealizations
 {
-    public class WineReferenceInfo : BaseReferenceInfo<Modules>
+    public class WineReferenceInformation : BaseReferenceInformation<Modules>
     {
 
     }

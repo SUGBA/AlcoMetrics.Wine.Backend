@@ -10,7 +10,7 @@ namespace Core.Models.Abstractions
     /// Базовая справочная информация
     /// </summary>
     /// <typeparam name="TE"> Enum с модулем интерфейса, где используется памятка </typeparam>
-    public abstract class BaseReferenceInfo<TE> : BaseEntity where TE : Enum
+    public abstract class BaseReferenceInformation<TE> : BaseEntity where TE : Enum
     {
         /// <summary>
         /// Информация
