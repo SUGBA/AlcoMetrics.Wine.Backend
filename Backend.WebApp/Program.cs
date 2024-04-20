@@ -2,8 +2,8 @@ using System.Security.Claims;
 using DataBase.EF.ConnectionFroWine.DbContexts;
 using IdentityServer4.AccessTokenValidation;
 using WebApp.Extensions;
-using WebApp.Services.Account;
-using WebApp.Services.Account.Abstract;
+using WebApp.UseCases.Account;
+using WebApp.UseCases.Account.Abstract;
 
 namespace Backend.WebApp
 {

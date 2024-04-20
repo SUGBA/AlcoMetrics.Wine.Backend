@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApp.Controllers.Base;
 using WebApp.Models.Request.Account;
-using WebApp.Services.Account.Abstract;
+using WebApp.UseCases.Account.Abstract;
 
 namespace WebApp.Controllers
 {
@@ -8,7 +9,7 @@ namespace WebApp.Controllers
     /// Контроллер для работы с аккаунтами пользователей
     /// </summary>
     [Route("Account")]
-    public class AccountController : Controller
+    public class AccountController : BaseWineController
     {
         private readonly IAccountService _accountService;
 

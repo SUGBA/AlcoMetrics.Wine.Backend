@@ -1,4 +1,4 @@
-﻿namespace WebApp.Services.Account.Abstract
+﻿namespace WebApp.UseCases.Account.Abstract
 {
     /// <summary>
     /// Сервси для работы с контроллером AccountController

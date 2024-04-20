@@ -1,13 +1,14 @@
 ﻿using Core.Actions.Abstractions.DataBaseConnector;
 using Core.Models.WineRealizations;
-using WebApp.Services.Account.Abstract;
+using WebApp.UseCases.Account.Abstract;
+using WebApp.UseCases.Base.Abstract;
 
-namespace WebApp.Services.Account
+namespace WebApp.UseCases.Account
 {
     /// <summary>
     /// Сервси для работы с контроллером AccountController
     /// </summary>
-    public class AccountService : IAccountService
+    public class AccountService : BaseWineService ,IAccountService
     {
         private readonly IBaseGenericRepository<WineUser> _repository;
 
