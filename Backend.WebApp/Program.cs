@@ -2,6 +2,7 @@ using System.Security.Claims;
 using DataBase.EF.ConnectionFroWine.DbContexts;
 using IdentityServer4.AccessTokenValidation;
 using WebApp.Extensions;
+using WebApp.Services.AutoMap.Profiles;
 using WebApp.UseCases.Account;
 using WebApp.UseCases.Account.Abstract;
 
@@ -37,6 +38,10 @@ namespace Backend.WebApp
 
             builder.Services.AddControllers();
 
+            builder.Services.AddAutoMapper(typeof(Client2DomenModeProfile), typeof(IntegrationAPIProfile));
+            builder.Services.AddHttpContextAccessor();
+
+            builder.ConfigureWineUseCases();
             builder.AddWineCoreServices();
             builder.Services.AddTransient<IAccountService, AccountService>();
 

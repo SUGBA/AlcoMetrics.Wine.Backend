@@ -6,13 +6,21 @@ namespace WebApp.UseCases.Base.Abstract
     /// <summary>
     /// Базовый сервис для всех сервисов в виноделии
     /// </summary>
-    public abstract class BaseWineService
+    public class BaseWineService
     {
         private readonly IMapper _mapper;
 
+        private readonly HttpContextAccessor _httpContextAccessor;
+
+        protected BaseWineService(IMapper mapper, HttpContextAccessor httpContextAccessor)
+        {
+            _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
         protected BaseWineService()
         {
-            _mapper = ConfigureAutoMaper();
+            //_mapper = ConfigureAutoMaper();
         }
 
         #region AuttoMapper

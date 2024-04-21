@@ -40,16 +40,20 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
             table.Add(item);
         }
 
-        public void Delete(int id)
+        public bool Delete(int id)
         {
-            T existing = table.Find(id);
+            T? existing = table.FirstOrDefault(x => x.Id == id);
+            if (existing == null) return false;
             table.Remove(existing);
+            return true;
         }
 
-        public void Delete(T item)
+        public bool Delete(T item)
         {
-            T existing = table.Find(item.Id);
+            T? existing = table.FirstOrDefault(item);
+            if (existing == null) return false;
             table.Remove(existing);
+            return true;
         }
 
         public IEnumerable<T> GetAll()
@@ -57,9 +61,9 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
             return table.ToList();
         }
 
-        public T GetById(int id)
+        public T? GetById(int id)
         {
-            return table.Find(id);
+            return table.FirstOrDefault(x => x.Id == id);
         }
 
         public IEnumerable<T> GetWithInclude(Expression<Func<T, object>>[] includeProperties)
@@ -89,6 +93,34 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
         {
             table.Attach(item);
             _context.Entry(item).State = EntityState.Modified;
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await table.ToListAsync<T>();
+        }
+
+        public async Task<T?> GetByIdAsync(int id)
+        {
+            return await table.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task AddAsync(T item)
+        {
+            await table.AddAsync(item);
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            T? existing = await table.FirstOrDefaultAsync(x => x.Id == id);
+            if (existing == null) return false;
+            table.Remove(existing);
+            return true;
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }
