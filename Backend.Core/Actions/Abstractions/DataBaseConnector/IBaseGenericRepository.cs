@@ -38,12 +38,6 @@ namespace Core.Actions.Abstractions.DataBaseConnector
         public void Add(BE item);
 
         /// <summary>
-        /// Добавить асинхронно
-        /// </summary>
-        /// <param name="item"> Добавляемый элемент</param>
-        public Task AddAsync(BE item);
-
-        /// <summary>
         /// Изменить
         /// </summary>
         /// <param name="item"> Изменяемый элемент </param>

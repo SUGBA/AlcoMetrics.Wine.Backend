@@ -13,7 +13,8 @@ namespace WebApp.UseCases.ProjectsPage
     {
         private readonly IBaseGenericRepository<WineTimeLine> _timeLineRepository;
 
-        public ProjectsPageService(IBaseGenericRepository<WineTimeLine> timeLineRepository)
+        public ProjectsPageService(IBaseGenericRepository<WineTimeLine> timeLineRepository,
+            IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _timeLineRepository = timeLineRepository;
         }
@@ -24,12 +25,14 @@ namespace WebApp.UseCases.ProjectsPage
         /// <param name="id"> Идентификатор проекта </param>
         /// <param name="changedName"> Новое имя проекта </param>
         /// <returns></returns>
-        public async Task<bool> ChangeProjectName(int id, string changedName)
+        public async Task<bool> ChangeProjectNameAsync(int id, string changedName)
         {
             var project = await _timeLineRepository.GetByIdAsync(id);
             if (project == null) return false;
+
             project.TimeLineName = changedName;
             await _timeLineRepository.SaveChangesAsync();
+
             return true;
         }
 
@@ -48,11 +51,15 @@ namespace WebApp.UseCases.ProjectsPage
         /// </summary>
         /// <param name="userId"> Идентификкатор пользователя </param>
         /// <returns></returns>
-        public async Task<IEnumerable<ProjectResponse>> GetListProjects(int userId)
+        public async Task<IEnumerable<ProjectResponse>> GetListProjectsAsync()
         {
+            var userId = GetUserId();
+            if (userId == null) return Enumerable.Empty<ProjectResponse>();
+
             var projects = await _timeLineRepository.GetAllAsync();
             var currentUserProjects = projects.Where(x => x.UserId == userId);
-            var result = projects.Select(x => new ProjectResponse()
+
+            var result = currentUserProjects.Select(x => new ProjectResponse()
             {
                 Id = x.Id,
                 EventCount = x.Days.FirstOrDefault(d => d.CurrentDate == DateTime.Now)?.Events.Count ?? 0,

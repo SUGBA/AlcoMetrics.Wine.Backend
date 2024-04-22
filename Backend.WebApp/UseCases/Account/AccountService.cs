@@ -8,11 +8,12 @@ namespace WebApp.UseCases.Account
     /// <summary>
     /// Сервси для работы с контроллером AccountController
     /// </summary>
-    public class AccountService : BaseWineService ,IAccountService
+    public class AccountService : BaseWineService, IAccountService
     {
         private readonly IBaseGenericRepository<WineUser> _repository;
 
-        public AccountService(IBaseGenericRepository<WineUser> repository)
+        public AccountService(IBaseGenericRepository<WineUser> repository,
+            IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _repository = repository;
         }
@@ -39,7 +40,7 @@ namespace WebApp.UseCases.Account
         /// <returns></returns>
         private bool Register(string login, string password, int id)
         {
-            var user = new WineUser() { Login = login, Password = password, Id = id};
+            var user = new WineUser() { Login = login, Password = password, Id = id };
             _repository.Add(user);
             _repository.SaveChanges();
             return true;

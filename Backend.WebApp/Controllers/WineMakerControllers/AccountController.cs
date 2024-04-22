@@ -3,7 +3,7 @@ using WebApp.Controllers.Base;
 using WebApp.Models.Request.Account;
 using WebApp.UseCases.Account.Abstract;
 
-namespace WebApp.Controllers
+namespace WebApp.Controllers.WineMakerControllers
 {
     /// <summary>
     /// Контроллер для работы с аккаунтами пользователей

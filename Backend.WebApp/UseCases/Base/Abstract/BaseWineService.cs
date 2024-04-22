@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using WebApp.Extensions;
 using WebApp.Services.AutoMap.Profiles;
 
 namespace WebApp.UseCases.Base.Abstract
@@ -10,18 +11,26 @@ namespace WebApp.UseCases.Base.Abstract
     {
         private readonly IMapper _mapper;
 
-        private readonly HttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        protected BaseWineService(IMapper mapper, HttpContextAccessor httpContextAccessor)
+        public BaseWineService(IHttpContextAccessor httpContextAccessor)
         {
-            _mapper = mapper;
+            _mapper = ConfigureAutoMaper();
             _httpContextAccessor = httpContextAccessor;
         }
 
-        protected BaseWineService()
+        #region UserClaims
+
+        /// <summary>
+        /// Получить идентификатор текущего пользователя
+        /// </summary>
+        /// <returns></returns>
+        protected int? GetUserId()
         {
-            //_mapper = ConfigureAutoMaper();
+            return _httpContextAccessor?.HttpContext?.User.GetUserId();
         }
+
+        #endregion
 
         #region AuttoMapper
 
@@ -38,7 +47,7 @@ namespace WebApp.UseCases.Base.Abstract
         }
 
         /// <summary>
-        /// Создаем экземпляр AutoMapper'а, чтобы не тянуть все дочерние классы
+        /// Создаем экземпляр AutoMapper'а, чтобы не тянуть зависимость во все дочерние классы
         /// </summary>
         /// <returns></returns>
         private IMapper ConfigureAutoMaper()

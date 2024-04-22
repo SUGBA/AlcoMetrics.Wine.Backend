@@ -223,8 +223,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_WineTimeLines_UserId",
                 table: "WineTimeLines",
-                column: "UserId",
-                unique: true);
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

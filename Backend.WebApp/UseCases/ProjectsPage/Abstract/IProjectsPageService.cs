@@ -10,9 +10,8 @@ namespace WebApp.UseCases.ProjectsPage.Abstract
         /// <summary>
         /// Получить список мероприятий
         /// </summary>
-        /// <param name="userId"> Идентификкатор пользователя </param>
         /// <returns></returns>
-        Task<IEnumerable<ProjectResponse>> GetListProjects(int id);
+        Task<IEnumerable<ProjectResponse>> GetListProjectsAsync();
 
         /// <summary>
         /// Изменить имя проекта
@@ -20,7 +19,7 @@ namespace WebApp.UseCases.ProjectsPage.Abstract
         /// <param name="id"> Идентификатор проекта </param>
         /// <param name="changedName"> Новое имя проекта </param>
         /// <returns></returns>
-        Task<bool> ChangeProjectName(int id, string changedName);
+        Task<bool> ChangeProjectNameAsync(int id, string changedName);
 
         /// <summary>
         /// Удалить проект
