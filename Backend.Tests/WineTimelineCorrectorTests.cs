@@ -22,7 +22,7 @@ namespace Tests
         [Fact]
         public void CheckingCircuitWithCorrectParameters()
         {
-            var repository = new WineRepository<WineTypicalEvent>();
+            var repository = new BaseWineRepository<WineTypicalEvent>();
             var chainCreator = new ShaptalizationAlcoholizationChainCreater(repository);
             var corrector = new WineTimelineCorrector(chainCreator);
 
@@ -49,7 +49,7 @@ namespace Tests
         [Fact]
         public void CheckingCircuitWithCorrectParameters2()
         {
-            var repository = new WineRepository<WineTypicalEvent>();
+            var repository = new BaseWineRepository<WineTypicalEvent>();
             var chainCreator = new ShaptalizationAlcoholizationChainCreater(repository);
             var corrector = new WineTimelineCorrector(chainCreator);
 

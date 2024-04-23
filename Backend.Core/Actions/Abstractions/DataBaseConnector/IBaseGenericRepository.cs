@@ -1,8 +1,12 @@
-﻿using System.Linq.Expressions;
-using Core.Models.Abstractions;
+﻿using Core.Models.Abstractions;
 
 namespace Core.Actions.Abstractions.DataBaseConnector
 {
+    /// <summary>
+    /// Базовая абстракция получения данных, в которой описан основные функции при работе с БД
+    /// Сюда не помещаются фишечки EF или других инструментов получения данных, только базовый CRUD
+    /// </summary>
+    /// <typeparam name="BE"></typeparam>
     public interface IBaseGenericRepository<BE> where BE : BaseEntity
     {
         /// <summary>
@@ -54,45 +58,6 @@ namespace Core.Actions.Abstractions.DataBaseConnector
         /// </summary>
         /// <param name="id"> Id удаляемого элемента </param>
         public Task<bool> DeleteAsync(int id);
-
-        /// <summary>
-        /// Удалить
-        /// </summary>
-        /// <param name="item"> Удаляемый элемент </param>
-        public bool Delete(BE item);
-
-        /// <summary>
-        /// Сохранить изменения
-        /// </summary>
-        public void SaveChanges();
-
-        /// <summary>
-        /// Сохранить изменения асинхронно
-        /// </summary>
-        public Task SaveChangesAsync();
-
-        /// <summary>
-        /// Получить с вложенными сущностями
-        /// </summary>
-        /// <param name="includeProperties"></param>
-        /// <returns></returns>
-        public IEnumerable<BE> GetWithInclude(Expression<Func<BE, object>>[] includeProperties);
-
-        /// <summary>
-        /// Получить с вложенными сущностями
-        /// </summary>
-        /// <param name="predicate"></param>
-        /// <param name="includeProperties"></param>
-        /// <returns></returns>
-        public IEnumerable<BE> GetWithInclude(Func<BE, bool> predicate, Expression<Func<BE, object>>[] includeProperties);
-
-        /// <summary>
-        /// Установить сущность, как неизмененную сущность
-        /// Используется для связи существующих сущностей
-        /// </summary>
-        /// <typeparam name="K"> Тип неотслеживаемой сущности </typeparam>
-        /// <param name="item"> Сущность </param>
-        public void SetItemUnchanged(BE item);
 
         /// <summary>
         /// Добавить множество элементов

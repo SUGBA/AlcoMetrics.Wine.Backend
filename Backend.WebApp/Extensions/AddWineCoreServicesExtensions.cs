@@ -30,7 +30,6 @@ namespace WebApp.Extensions
         {
             applicationBuilder.Services.AddTransient<ITimeLineEventChainCreator<WineTimeLine, WineIndicator>, ShaptalizationAlcoholizationChainCreater>();
             applicationBuilder.Services.AddTransient<BaseTimelineCorrector<WineTimeLine, WineIndicator>, WineTimelineCorrector>();
-            applicationBuilder.Services.AddTransient(typeof(IBaseGenericRepository<>), typeof(WineRepository<>));
             applicationBuilder.Services.AddTransient<IBaseCalculatorFactory<MeasurementUnits>, CalculatorFactory>();
             applicationBuilder.Services.AddTransient<IBaseUnitsCalculator<MeasurementUnits>, UnitsCalculator>();
             applicationBuilder.Services.AddTransient<BaseTimeLineCalculator<WineIndicator>, WIneTimeLineCalculator>();

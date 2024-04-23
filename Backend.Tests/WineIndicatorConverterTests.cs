@@ -20,8 +20,8 @@ namespace Tests
         {
             var type = InitialIndicatorTypes.ByAreometr;
             var parameter = 1096;
-            var _areometrRepository = new WineRepository<AreometrDefaultValue>();
-            var _grapeVarietyRepository = new WineRepository<GrapeVariety>();
+            var _areometrRepository = new BaseWineRepository<AreometrDefaultValue>();
+            var _grapeVarietyRepository = new BaseWineRepository<GrapeVariety>();
             var _calculatorFactory = new CalculatorFactory();
             var _calculator = new UnitsCalculator(_calculatorFactory);
             var factory = new WineIndicatorConverterFactory(_areometrRepository, _grapeVarietyRepository, _calculator);
@@ -38,8 +38,8 @@ namespace Tests
         {
             var type = InitialIndicatorTypes.ByAreometr;
             var parameter = "some type";
-            var _areometrRepository = new WineRepository<AreometrDefaultValue>();
-            var _grapeVarietyRepository = new WineRepository<GrapeVariety>();
+            var _areometrRepository = new BaseWineRepository<AreometrDefaultValue>();
+            var _grapeVarietyRepository = new BaseWineRepository<GrapeVariety>();
             var _calculatorFactory = new CalculatorFactory();
             var _calculator = new UnitsCalculator(_calculatorFactory);
             var factory = new WineIndicatorConverterFactory(_areometrRepository, _grapeVarietyRepository, _calculator);
@@ -55,8 +55,8 @@ namespace Tests
         {
             var type = InitialIndicatorTypes.ByIndicator;
             var parameter = new WineIndicator() { NitrogenValue = 12, EthanolValue = 0, SugarValue = 5, WortValue = 40 };
-            var _areometrRepository = new WineRepository<AreometrDefaultValue>();
-            var _grapeVarietyRepository = new WineRepository<GrapeVariety>();
+            var _areometrRepository = new BaseWineRepository<AreometrDefaultValue>();
+            var _grapeVarietyRepository = new BaseWineRepository<GrapeVariety>();
             var _calculatorFactory = new CalculatorFactory();
             var _calculator = new UnitsCalculator(_calculatorFactory);
             var factory = new WineIndicatorConverterFactory(_areometrRepository, _grapeVarietyRepository, _calculator);
@@ -73,8 +73,8 @@ namespace Tests
         {
             var type = InitialIndicatorTypes.ByIndicator;
             var parameter = "some type";
-            var _areometrRepository = new WineRepository<AreometrDefaultValue>();
-            var _grapeVarietyRepository = new WineRepository<GrapeVariety>();
+            var _areometrRepository = new BaseWineRepository<AreometrDefaultValue>();
+            var _grapeVarietyRepository = new BaseWineRepository<GrapeVariety>();
             var _calculatorFactory = new CalculatorFactory();
             var _calculator = new UnitsCalculator(_calculatorFactory);
             var factory = new WineIndicatorConverterFactory(_areometrRepository, _grapeVarietyRepository, _calculator);
@@ -90,8 +90,8 @@ namespace Tests
         {
             var type = InitialIndicatorTypes.ByGrapeVariety;
             var parameter = "eine sehr gute wine";
-            var _areometrRepository = new WineRepository<AreometrDefaultValue>();
-            var _grapeVarietyRepository = new WineRepository<GrapeVariety>();
+            var _areometrRepository = new BaseWineRepository<AreometrDefaultValue>();
+            var _grapeVarietyRepository = new BaseWineRepository<GrapeVariety>();
             var _calculatorFactory = new CalculatorFactory();
             var _calculator = new UnitsCalculator(_calculatorFactory);
             var factory = new WineIndicatorConverterFactory(_areometrRepository, _grapeVarietyRepository, _calculator);
@@ -108,8 +108,8 @@ namespace Tests
         {
             var type = InitialIndicatorTypes.ByGrapeVariety;
             var parameter = 1785;
-            var _areometrRepository = new WineRepository<AreometrDefaultValue>();
-            var _grapeVarietyRepository = new WineRepository<GrapeVariety>();
+            var _areometrRepository = new BaseWineRepository<AreometrDefaultValue>();
+            var _grapeVarietyRepository = new BaseWineRepository<GrapeVariety>();
             var _calculatorFactory = new CalculatorFactory();
             var _calculator = new UnitsCalculator(_calculatorFactory);
             var factory = new WineIndicatorConverterFactory(_areometrRepository, _grapeVarietyRepository, _calculator);
@@ -126,7 +126,7 @@ namespace Tests
         public void GettingIndicatorByGrapeVarietyWithExistName()
         {
             var parameter = "Агадаи";
-            var _grapeVarietyRepository = new WineRepository<GrapeVariety>();
+            var _grapeVarietyRepository = new BaseWineRepository<GrapeVariety>();
             var _calculatorFactory = new CalculatorFactory();
             var _calculator = new UnitsCalculator(_calculatorFactory);
             var converter = new ByGrapeVarietyIndicatorConverter(parameter, _grapeVarietyRepository, _calculator);
@@ -145,7 +145,7 @@ namespace Tests
         public void GettingIndicatorByGrapeVarietyWithNonExistName()
         {
             var parameter = "Бубылдочка";
-            var _grapeVarietyRepository = new WineRepository<GrapeVariety>();
+            var _grapeVarietyRepository = new BaseWineRepository<GrapeVariety>();
             var _calculatorFactory = new CalculatorFactory();
             var _calculator = new UnitsCalculator(_calculatorFactory);
             var converter = new ByGrapeVarietyIndicatorConverter(parameter, _grapeVarietyRepository, _calculator);
@@ -162,7 +162,7 @@ namespace Tests
         public void GettingIndicatorByAreometerWithExistValue()
         {
             var parameter = 1040;
-            var _grapeVarietyRepository = new WineRepository<AreometrDefaultValue>();
+            var _grapeVarietyRepository = new BaseWineRepository<AreometrDefaultValue>();
             var _calculatorFactory = new CalculatorFactory();
             var _calculator = new UnitsCalculator(_calculatorFactory);
             var converter = new ByAreometerIndicatorConverter(parameter, _grapeVarietyRepository, _calculator);
@@ -180,7 +180,7 @@ namespace Tests
         public void GettingIndicatorByAreometerWithNonExistValue()
         {
             var parameter = 0;
-            var _grapeVarietyRepository = new WineRepository<AreometrDefaultValue>();
+            var _grapeVarietyRepository = new BaseWineRepository<AreometrDefaultValue>();
             var _calculatorFactory = new CalculatorFactory();
             var _calculator = new UnitsCalculator(_calculatorFactory);
             var converter = new ByAreometerIndicatorConverter(parameter, _grapeVarietyRepository, _calculator);

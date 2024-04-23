@@ -1,10 +1,7 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using Core.Actions.Abstractions.DataBaseConnector;
-using Core.Actions.Abstractions.TimelineCorrector;
+﻿using Core.Actions.Abstractions.TimelineCorrector;
 using Core.Actions.Abstractions.TimeLineCreator;
-using Core.Actions.Abstractions.TImeLineIndicatorConverter;
 using Core.Models.WineRealizations;
-using Microsoft.EntityFrameworkCore.Internal;
+using DataBase.EF.ConnectionFroWine.Repository;
 using WebApp.Models.Request.ProjectsPage;
 using WebApp.Models.Response.ProjectsPage;
 using WebApp.UseCases.Base.Abstract;
@@ -31,24 +28,16 @@ namespace WebApp.UseCases.ProjectsPage
         /// </summary>
         private readonly BaseTimelineCorrector<WineTimeLine, WineIndicator> _timelineCorrector;
 
-        private readonly IBaseGenericRepository<WineTimeLine> _timeLineRepository;
+        private readonly IProjectPageServiceRepository _repository;
 
-        private readonly IBaseGenericRepository<WineTypicalEvent> _typicalEventRepository;
-
-        private readonly IBaseGenericRepository<WineEvent> _eventRepository;
-
-        public ProjectsPageService(IBaseGenericRepository<WineTimeLine> timeLineRepository,
+        public ProjectsPageService(IProjectPageServiceRepository repository,
             IHttpContextAccessor httpContextAccessor,
              BaseTimeLineCreator<WineIndicator, WineTimeLine, WineDay> timeLineCreator,
-             BaseTimelineCorrector<WineTimeLine, WineIndicator> timelineCorrector,
-             IBaseGenericRepository<WineTypicalEvent> eventRepository,
-             IBaseGenericRepository<WineEvent> ventRepository) : base(httpContextAccessor)
+             BaseTimelineCorrector<WineTimeLine, WineIndicator> timelineCorrector) : base(httpContextAccessor)
         {
-            _timeLineRepository = timeLineRepository;
+            _repository = repository;
             _timeLineCreator = timeLineCreator;
             _timelineCorrector = timelineCorrector;
-            _typicalEventRepository = eventRepository;
-            _eventRepository = ventRepository;
         }
 
         /// <summary>
@@ -59,11 +48,11 @@ namespace WebApp.UseCases.ProjectsPage
         /// <returns></returns>
         public async Task<bool> ChangeProjectNameAsync(int id, string changedName)
         {
-            var project = await _timeLineRepository.GetByIdAsync(id);
+            var project = await _repository.GetByIdAsync(id);
             if (project == null) return false;
 
             project.TimeLineName = changedName;
-            await _timeLineRepository.SaveChangesAsync();
+            _repository.Update(project);
 
             return true;
         }
@@ -91,20 +80,9 @@ namespace WebApp.UseCases.ProjectsPage
                 return new CreateProjectResponse() { Error = NULL_USER_ID_ERROR };
             timeLine.UserId = (int)currentUserId;
 
-            //Помечаем все событие, как не измененные, чтобы EF не пытался создать новые сущности справочника с днями
-            foreach (var day in timeLine.Days)
-            {
-                foreach (var evnt in day.Events)
-                {
-                    _typicalEventRepository.SetItemUnchanged(evnt.TypicalEvent);
-                }
-                await _eventRepository.AddRangeAsync(day.Events);
-            }
+            await _repository.AddTimeLineAsync(timeLine);
 
-            _timeLineRepository.Add(timeLine);
-            await _timeLineRepository.SaveChangesAsync();
-
-            var dbTimeLine = _timeLineRepository.GetAll().FirstOrDefault(timeLine);
+            var dbTimeLine = _repository.GetAll().FirstOrDefault(timeLine);
 
             var response = new ProjectResponse()        //Формируем ответ
             {
@@ -143,8 +121,7 @@ namespace WebApp.UseCases.ProjectsPage
         /// <returns></returns>
         public async Task<bool> DeleteProjectAsync(int id)
         {
-            var result = await _timeLineRepository.DeleteAsync(id);
-            await _timeLineRepository.SaveChangesAsync();
+            var result = await _repository.DeleteAsync(id);
             return result;
         }
 
@@ -158,7 +135,7 @@ namespace WebApp.UseCases.ProjectsPage
             var userId = GetUserId();
             if (userId == null) return Enumerable.Empty<ProjectResponse>();
 
-            var projects = await _timeLineRepository.GetAllAsync();
+            var projects = await _repository.GetAllAsync();
             var currentUserProjects = projects.Where(x => x.UserId == userId);
 
             var result = currentUserProjects.Select(x => new ProjectResponse()

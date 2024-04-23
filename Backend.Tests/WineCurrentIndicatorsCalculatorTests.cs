@@ -18,7 +18,7 @@ namespace Tests
         [Fact]
         public void CheckFactoryWithCorrectParameters()
         {
-            var differenceAreometRrepository = new WineRepository<DifferenceAreometrDefaultValue>();
+            var differenceAreometRrepository = new BaseWineRepository<DifferenceAreometrDefaultValue>();
             var factory = new WineCurrentIndicatorsCalculatorFactory(differenceAreometRrepository);
             var type = UpdateIndicatorTypes.ByAreometr;
             var startValue = 1.040;
@@ -35,7 +35,7 @@ namespace Tests
         [Fact]
         public void CheckFactoryWithInCorrectParameters1()
         {
-            var differenceAreometRrepository = new WineRepository<DifferenceAreometrDefaultValue>();
+            var differenceAreometRrepository = new BaseWineRepository<DifferenceAreometrDefaultValue>();
             var factory = new WineCurrentIndicatorsCalculatorFactory(differenceAreometRrepository);
             var type = UpdateIndicatorTypes.ByAreometr;
             var startValue = 1.040;
@@ -50,7 +50,7 @@ namespace Tests
         [Fact]
         public void CheckFactoryWithInCorrectParameters2()
         {
-            var differenceAreometRrepository = new WineRepository<DifferenceAreometrDefaultValue>();
+            var differenceAreometRrepository = new BaseWineRepository<DifferenceAreometrDefaultValue>();
             var factory = new WineCurrentIndicatorsCalculatorFactory(differenceAreometRrepository);
             var type = UpdateIndicatorTypes.ByAreometr;
             var startValue = 1.040;
@@ -67,7 +67,7 @@ namespace Tests
         [Fact]
         public void CheckcalculatorWithCorrectParameters()
         {
-            var differenceAreometRrepository = new WineRepository<DifferenceAreometrDefaultValue>();
+            var differenceAreometRrepository = new BaseWineRepository<DifferenceAreometrDefaultValue>();
             var factory = new WineCurrentIndicatorsCalculatorFactory(differenceAreometRrepository);
             var type = UpdateIndicatorTypes.ByAreometr;
             var startValue = 1.040;
@@ -87,7 +87,7 @@ namespace Tests
         [Fact]
         public void CheckcalculatorWithInCorrectParameters()
         {
-            var differenceAreometRrepository = new WineRepository<DifferenceAreometrDefaultValue>();
+            var differenceAreometRrepository = new BaseWineRepository<DifferenceAreometrDefaultValue>();
             var factory = new WineCurrentIndicatorsCalculatorFactory(differenceAreometRrepository);
             var type = UpdateIndicatorTypes.ByAreometr;
             var startValue = 1.04;
@@ -105,7 +105,7 @@ namespace Tests
         [Fact]
         public void CheckCalculatorFacadeWithCorrectParameters()
         {
-            var differenceAreometRrepository = new WineRepository<DifferenceAreometrDefaultValue>();
+            var differenceAreometRrepository = new BaseWineRepository<DifferenceAreometrDefaultValue>();
             var unitsFactory = new CalculatorFactory();
             var unitsCalculator = new UnitsCalculator(unitsFactory);
             var factory = new WineCurrentIndicatorsCalculatorFactory(differenceAreometRrepository);
@@ -127,7 +127,7 @@ namespace Tests
         [Fact]
         public void CheckCalculatorFacadeWithInCorrectParameters()
         {
-            var differenceAreometRrepository = new WineRepository<DifferenceAreometrDefaultValue>();
+            var differenceAreometRrepository = new BaseWineRepository<DifferenceAreometrDefaultValue>();
             var unitsFactory = new CalculatorFactory();
             var unitsCalculator = new UnitsCalculator(unitsFactory);
             var factory = new WineCurrentIndicatorsCalculatorFactory(differenceAreometRrepository);

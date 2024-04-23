@@ -47,7 +47,7 @@ namespace Core.Actions.WineRealizations.WineTimeLineCreator
                     EthanolValue = vectors[i][2],
                     SugarValue = vectors[i][3],
                 };
-                var day = new WineDay() { Indicator = indicator, CurrentDate = DateTime.Now.AddDays(i) };
+                var day = new WineDay() { Indicator = indicator, CurrentDate = DateTime.UtcNow.AddDays(i) };
                 res.Days.Add(day);
             }
 

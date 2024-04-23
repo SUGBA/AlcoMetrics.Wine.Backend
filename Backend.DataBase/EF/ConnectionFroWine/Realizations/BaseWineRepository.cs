@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using Core.Actions.Abstractions.DataBaseConnector;
+﻿using Core.Actions.Abstractions.DataBaseConnector;
 using Core.Models.Abstractions;
 using DataBase.EF.ConnectionFroWine.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -10,26 +9,26 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
     /// Контект для виноделия
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class WineRepository<T> : IBaseGenericRepository<T> where T : BaseEntity
+    public class BaseWineRepository<T> : IBaseGenericRepository<T> where T : BaseEntity
     {
         /// <summary>
         /// Контекст
         /// </summary>
-        private WineDbContext _context;
+        protected WineDbContext _context;
 
         /// <summary>
         /// Таблица
         /// </summary>
-        private DbSet<T> table;
+        protected DbSet<T> table;
 
-        public WineRepository()
+        public BaseWineRepository()
         {
             _context = new WineDbContext();
 
             table = _context.Set<T>();
         }
 
-        public WineRepository(WineDbContext context)
+        public BaseWineRepository(WineDbContext context)
         {
             _context = context;
             table = _context.Set<T>();
@@ -38,6 +37,7 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
         public void Add(T item)
         {
             table.Add(item);
+            _context.SaveChanges();
         }
 
         public bool Delete(int id)
@@ -45,14 +45,7 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
             T? existing = table.FirstOrDefault(x => x.Id == id);
             if (existing == null) return false;
             table.Remove(existing);
-            return true;
-        }
-
-        public bool Delete(T item)
-        {
-            T? existing = table.FirstOrDefault(item);
-            if (existing == null) return false;
-            table.Remove(existing);
+            _context.SaveChanges();
             return true;
         }
 
@@ -64,29 +57,6 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
         public T? GetById(int id)
         {
             return table.FirstOrDefault(x => x.Id == id);
-        }
-
-        public IEnumerable<T> GetWithInclude(Expression<Func<T, object>>[] includeProperties)
-        {
-            return Include(includeProperties).ToList();
-        }
-
-        public IEnumerable<T> GetWithInclude(Func<T, bool> predicate, Expression<Func<T, object>>[] includeProperties)
-        {
-            var query = Include(includeProperties);
-            return query.Where(predicate).ToList();
-        }
-
-        private IQueryable<T> Include(params Expression<Func<T, object>>[] includeProperties)
-        {
-            IQueryable<T> query = table.AsNoTracking();
-            return includeProperties
-                .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-        }
-
-        public void SaveChanges()
-        {
-            _context.SaveChanges();
         }
 
         public void Update(T item)
@@ -110,28 +80,20 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
             T? existing = await table.FirstOrDefaultAsync(x => x.Id == id);
             if (existing == null) return false;
             table.Remove(existing);
+            _context.SaveChanges();
             return true;
-        }
-
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
-
-        public void SetItemUnchanged(T item)
-        {
-            if (item != null)
-                _context.Entry(item).State = EntityState.Unchanged;
         }
 
         public void AddRange(IEnumerable<T> items)
         {
             table.AddRange(items);
+            _context.SaveChanges();
         }
 
         public async Task AddRangeAsync(IEnumerable<T> items)
         {
             await table.AddRangeAsync(items);
+            _context.SaveChanges();
         }
     }
 }

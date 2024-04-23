@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DataBase.Migrations
+namespace DataBase.EF.ConnectionFroWine.Migrations
 {
     [DbContext(typeof(WineDbContext))]
     partial class WineDbContextModelSnapshot : ModelSnapshot
@@ -211,8 +211,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("WineTimeLines");
                 });
@@ -307,8 +306,8 @@ namespace DataBase.Migrations
             modelBuilder.Entity("Core.Models.WineRealizations.WineTimeLine", b =>
                 {
                     b.HasOne("Core.Models.WineRealizations.WineUser", "User")
-                        .WithOne("TimeLines")
-                        .HasForeignKey("Core.Models.WineRealizations.WineTimeLine", "UserId")
+                        .WithMany("TimeLines")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -327,8 +326,7 @@ namespace DataBase.Migrations
 
             modelBuilder.Entity("Core.Models.WineRealizations.WineUser", b =>
                 {
-                    b.Navigation("TimeLines")
-                        .IsRequired();
+                    b.Navigation("TimeLines");
                 });
 #pragma warning restore 612, 618
         }

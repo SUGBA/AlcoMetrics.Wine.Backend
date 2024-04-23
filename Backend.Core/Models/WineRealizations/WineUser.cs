@@ -10,6 +10,6 @@ namespace Core.Models.WineRealizations
         /// <summary>
         /// Список тайм-лайнов
         /// </summary>
-        public WineTimeLine TimeLines { get; set; }
+        public List<WineTimeLine> TimeLines { get; set; } = new();
     }
 }

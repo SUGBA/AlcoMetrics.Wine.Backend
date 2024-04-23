@@ -14,7 +14,7 @@ namespace Backend.WebApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<WineDbContext>(options => { }, ServiceLifetime.Transient);
+            builder.Services.AddDbContext<WineDbContext>(options => { }, ServiceLifetime.Scoped);
 
             builder.Services.AddCors(options =>
             {
@@ -48,6 +48,7 @@ namespace Backend.WebApp
             builder.Services.AddAutoMapper(typeof(Client2DomenModeProfile), typeof(IntegrationAPIProfile));
             builder.Services.AddHttpContextAccessor();
 
+            builder.AddRepository();
             builder.ConfigureWineUseCases();
             builder.AddWineCoreServices();
             builder.Services.AddTransient<IAccountService, AccountService>();

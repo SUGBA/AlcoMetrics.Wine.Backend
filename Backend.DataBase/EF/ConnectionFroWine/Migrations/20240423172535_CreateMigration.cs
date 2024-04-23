@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DataBase.Migrations
+namespace DataBase.EF.ConnectionFroWine.Migrations
 {
     public partial class CreateMigration : Migration
     {

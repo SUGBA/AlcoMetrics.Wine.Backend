@@ -42,7 +42,6 @@ namespace WebApp.UseCases.Account
         {
             var user = new WineUser() { Login = login, Password = password, Id = id };
             _repository.Add(user);
-            _repository.SaveChanges();
             return true;
         }
     }
