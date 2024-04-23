@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DataBase.EF.ConnectionFroWine.Migrations
+namespace DataBase.Migrations
 {
     public partial class CreateMigration : Migration
     {
@@ -161,7 +161,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WineEvents",
+                name: "WineEvent",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -174,21 +174,21 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WineEvents", x => x.Id);
+                    table.PrimaryKey("PK_WineEvent", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WineEvents_WineDays_DayId",
+                        name: "FK_WineEvent_WineDays_DayId",
                         column: x => x.DayId,
                         principalTable: "WineDays",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_WineEvents_WineIndicators_DesiredIndicatorId",
+                        name: "FK_WineEvent_WineIndicators_DesiredIndicatorId",
                         column: x => x.DesiredIndicatorId,
                         principalTable: "WineIndicators",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_WineEvents_WineTypicalEvents_TypicalEventId",
+                        name: "FK_WineEvent_WineTypicalEvents_TypicalEventId",
                         column: x => x.TypicalEventId,
                         principalTable: "WineTypicalEvents",
                         principalColumn: "Id",
@@ -206,18 +206,18 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
                 column: "TimeLineId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WineEvents_DayId",
-                table: "WineEvents",
+                name: "IX_WineEvent_DayId",
+                table: "WineEvent",
                 column: "DayId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WineEvents_DesiredIndicatorId",
-                table: "WineEvents",
+                name: "IX_WineEvent_DesiredIndicatorId",
+                table: "WineEvent",
                 column: "DesiredIndicatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WineEvents_TypicalEventId",
-                table: "WineEvents",
+                name: "IX_WineEvent_TypicalEventId",
+                table: "WineEvent",
                 column: "TypicalEventId");
 
             migrationBuilder.CreateIndex(
@@ -238,7 +238,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
                 name: "GrapeVarieties");
 
             migrationBuilder.DropTable(
-                name: "WineEvents");
+                name: "WineEvent");
 
             migrationBuilder.DropTable(
                 name: "WineReferenceInformations");

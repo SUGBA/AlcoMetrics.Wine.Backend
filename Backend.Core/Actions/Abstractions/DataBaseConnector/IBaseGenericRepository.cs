@@ -85,5 +85,27 @@ namespace Core.Actions.Abstractions.DataBaseConnector
         /// <param name="includeProperties"></param>
         /// <returns></returns>
         public IEnumerable<BE> GetWithInclude(Func<BE, bool> predicate, Expression<Func<BE, object>>[] includeProperties);
+
+        /// <summary>
+        /// Установить сущность, как неизмененную сущность
+        /// Используется для связи существующих сущностей
+        /// </summary>
+        /// <typeparam name="K"> Тип неотслеживаемой сущности </typeparam>
+        /// <param name="item"> Сущность </param>
+        public void SetItemUnchanged(BE item);
+
+        /// <summary>
+        /// Добавить множество элементов
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="items"></param>
+        public void AddRange(IEnumerable<BE> items);
+
+        /// <summary>
+        /// Добавить множество элементов
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="items"></param>
+        public Task AddRangeAsync(IEnumerable<BE> items);
     }
 }

@@ -3,19 +3,17 @@ using System;
 using DataBase.EF.ConnectionFroWine.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DataBase.EF.ConnectionFroWine.Migrations
+namespace DataBase.Migrations
 {
     [DbContext(typeof(WineDbContext))]
-    [Migration("20240420073914_CreateMigration")]
-    partial class CreateMigration
+    partial class WineDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,7 +143,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
 
                     b.HasIndex("TypicalEventId");
 
-                    b.ToTable("WineEvents");
+                    b.ToTable("WineEvent", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.WineRealizations.WineIndicator", b =>

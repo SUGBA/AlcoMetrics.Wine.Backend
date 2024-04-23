@@ -39,7 +39,7 @@ namespace WebApp.Controllers.WineMakerControllers
         /// <returns></returns>
         [HttpPost("ChangeProjectName")]
         [Authorize(Roles = "WineMaker")]
-        public async Task<bool> ChangeProjectName([FromBody] ChangeProjectNameRequest model)
+        public async Task<bool> ChangeProjectName([FromBody] ChangeProjectModelNameRequest model)
         {
             return await _projectsPageService.ChangeProjectNameAsync(model.Id, model.NewProjectName);
         }
@@ -54,6 +54,18 @@ namespace WebApp.Controllers.WineMakerControllers
         public async Task<IEnumerable<ProjectResponse>> GetProjects()
         {
             return await _projectsPageService.GetListProjectsAsync();
+        }
+
+        /// <summary>
+        /// Создание таймлайна по всем параметрам
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("CreateTimeLineByAllParams")]
+        [Authorize(Roles = "WineMaker")]
+        public async Task<CreateProjectResponse> CreateTimeLineByAllParams([FromBody] CreateProjectModelByAllParams model)
+        {
+            return await _projectsPageService.CreateTimeLineByAllParamsAsync(model);
         }
     }
 }

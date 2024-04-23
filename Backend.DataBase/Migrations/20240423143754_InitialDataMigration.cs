@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace DataBase.EF.ConnectionFroWine.Migrations
+namespace DataBase.Migrations
 {
     public partial class InitialDataMigration : Migration
     {

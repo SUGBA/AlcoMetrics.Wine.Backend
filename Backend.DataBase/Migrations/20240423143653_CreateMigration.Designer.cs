@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DataBase.EF.ConnectionFroWine.Migrations
+namespace DataBase.Migrations
 {
     [DbContext(typeof(WineDbContext))]
-    [Migration("20240420073950_InitialDataMigration")]
-    partial class InitialDataMigration
+    [Migration("20240423143653_CreateMigration")]
+    partial class CreateMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -145,7 +145,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
 
                     b.HasIndex("TypicalEventId");
 
-                    b.ToTable("WineEvents");
+                    b.ToTable("WineEvent", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.WineRealizations.WineIndicator", b =>

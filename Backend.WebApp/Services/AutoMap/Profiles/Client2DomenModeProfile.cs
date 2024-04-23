@@ -1,4 +1,9 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
+using Core.Models.WineRealizations;
+using MathNet.Numerics.Distributions;
+using WebApp.Models.Request.ProjectsPage;
+using WebApp.Models.Response.ProjectsPage;
 
 namespace WebApp.Services.AutoMap.Profiles
 {
@@ -9,7 +14,11 @@ namespace WebApp.Services.AutoMap.Profiles
     {
         public Client2DomenModeProfile()
         {
-            
+            #region ProjectPage
+
+
+         
+            #endregion
         }
     }
 }

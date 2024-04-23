@@ -38,7 +38,6 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
         public void Add(T item)
         {
             table.Add(item);
-            SaveChanges();
         }
 
         public bool Delete(int id)
@@ -46,7 +45,6 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
             T? existing = table.FirstOrDefault(x => x.Id == id);
             if (existing == null) return false;
             table.Remove(existing);
-            SaveChanges();
             return true;
         }
 
@@ -55,7 +53,6 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
             T? existing = table.FirstOrDefault(item);
             if (existing == null) return false;
             table.Remove(existing);
-            SaveChanges();
             return true;
         }
 
@@ -113,13 +110,28 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
             T? existing = await table.FirstOrDefaultAsync(x => x.Id == id);
             if (existing == null) return false;
             table.Remove(existing);
-            await SaveChangesAsync();
             return true;
         }
 
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public void SetItemUnchanged(T item)
+        {
+            if (item != null)
+                _context.Entry(item).State = EntityState.Unchanged;
+        }
+
+        public void AddRange(IEnumerable<T> items)
+        {
+            table.AddRange(items);
+        }
+
+        public async Task AddRangeAsync(IEnumerable<T> items)
+        {
+            await table.AddRangeAsync(items);
         }
     }
 }

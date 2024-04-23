@@ -5,7 +5,7 @@ namespace WebApp.Models.Request.ProjectsPage
     /// <summary>
     /// Модель изменения имени проекта
     /// </summary>
-    public class ChangeProjectNameRequest
+    public class ChangeProjectModelNameRequest
     {
         /// <summary>
         /// Id изменяемого проекта

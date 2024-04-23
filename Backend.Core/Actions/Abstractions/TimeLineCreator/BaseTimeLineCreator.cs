@@ -12,6 +12,23 @@ namespace Core.Actions.Abstractions.TimeLineCreator
     /// <typeparam name="D"> BaseDay </typeparam>
     public abstract class BaseTimeLineCreator<I, TL, D> where I : BaseIndicator where TL : BaseEntity
     {
+        /// <summary>
+        /// Дефолтное значение начала диапазона, если не задан промежуток рассчета
+        /// </summary>
+        protected virtual int StartTime
+        {
+            get { return 0; }
+        }
+
+        /// <summary>
+        /// Дефолтное значение конца диапазона, если не задан промежуток рассчета
+        /// </summary>
+        protected virtual int EndTime
+        {
+            get { return 100; }
+        }
+
+
         protected BaseTimeLineCalculator<I> calculator;
 
         public BaseTimeLineCreator(BaseTimeLineCalculator<I> calculator)
@@ -29,6 +46,21 @@ namespace Core.Actions.Abstractions.TimeLineCreator
         public TL GetTimeLine(I indicator, int startTime, int endTime)
         {
             var baseCalculatedTimeLine = Calculate(indicator, startTime, endTime);      //Рассчитали
+            var convertedTimeLine = Convert(baseCalculatedTimeLine);                    //Спарсили
+            convertedTimeLine = Correct(convertedTimeLine);                             //Скорректировали
+            return convertedTimeLine;
+        }
+
+        /// <summary>
+        /// Получить Тайм-лайн с дефолтным иапазоном
+        /// </summary>
+        /// <param name="indicator"> Начальный показания сусла </param>
+        /// <param name="startTime"> Начало прогноза </param>
+        /// <param name="endTime"> До какого дня будет рассчитываться (без учета корректировки) </param>
+        /// <returns></returns>
+        public TL GetTimeLine(I indicator)
+        {
+            var baseCalculatedTimeLine = Calculate(indicator, StartTime, EndTime);      //Рассчитали
             var convertedTimeLine = Convert(baseCalculatedTimeLine);                    //Спарсили
             convertedTimeLine = Correct(convertedTimeLine);                             //Скорректировали
             return convertedTimeLine;

@@ -1,4 +1,5 @@
-﻿using WebApp.Models.Response.ProjectsPage;
+﻿using WebApp.Models.Request.ProjectsPage;
+using WebApp.Models.Response.ProjectsPage;
 
 namespace WebApp.UseCases.ProjectsPage.Abstract
 {
@@ -27,5 +28,26 @@ namespace WebApp.UseCases.ProjectsPage.Abstract
         /// <param name="id"> Идентификатор проекта </param>
         /// <returns></returns>
         Task<bool> DeleteProjectAsync(int id);
+
+        /// <summary>
+        /// Создать таймлайн путем ввода всех параметров
+        /// </summary>
+        /// <param name="request"> Данные для генерации таймлайна </param>
+        /// <returns></returns>
+        Task<CreateProjectResponse> CreateTimeLineByAllParamsAsync(CreateProjectModelByAllParams request);
+
+        /// <summary>
+        /// Создать таймлайн путем ввода показаний ареометра
+        /// </summary>
+        /// <param name="request"> Данные для генерации таймлайна </param>
+        /// <returns></returns>
+        Task<CreateProjectResponse> CreateTimeLineByAreometerAsync(CreateProjectModelByAreometer request);
+
+        /// <summary>
+        /// Создать таймлайн путем выбора сорта винограда
+        /// </summary>
+        /// <param name="request"> Данные для генерации таймлайна </param>
+        /// <returns></returns>
+        Task<CreateProjectResponse> CreateTimeLineByGrapeVaretyAsync(CreateProjectModelByGrapeVarety request);
     }
 }

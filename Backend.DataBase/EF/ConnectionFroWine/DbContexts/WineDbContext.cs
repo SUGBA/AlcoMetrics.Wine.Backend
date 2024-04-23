@@ -1,4 +1,5 @@
 ﻿using Core.Models.WineRealizations;
+using DataBase.EF.ConnectionFroWine.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataBase.EF.ConnectionFroWine.DbContexts
@@ -40,6 +41,8 @@ namespace DataBase.EF.ConnectionFroWine.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.UseSerialColumns();
+
+            modelBuilder.ApplyConfiguration(new WineEventConfiguration());
         }
     }
 }
