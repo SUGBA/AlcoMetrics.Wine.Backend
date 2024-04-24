@@ -33,9 +33,6 @@ namespace Core.Actions.WineRealizations.WineIndicatorConverter
                 case InitialIndicatorTypes.ByAreometr:
                     if (param is int) return new ByAreometerIndicatorConverter((int)param, areometrRepository, unitsCalculator);
                     throw new Exception("Некорректные параметры");
-                case InitialIndicatorTypes.ByIndicator:
-                    if (param is WineIndicator) return new ByWineIndicatorConverter((WineIndicator)param);
-                    throw new Exception("Некорректные параметры");
                 case InitialIndicatorTypes.ByGrapeVariety:
                     if (param is string) return new ByGrapeVarietyIndicatorConverter((string)param, grapeVarietyRepository, unitsCalculator);
                     throw new Exception("Некорректные параметры");

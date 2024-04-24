@@ -11,6 +11,6 @@ namespace WebApp.Models.Request.ProjectsPage
         /// Наименование сорта винограда
         /// </summary>
         [JsonPropertyName("GrapeName")]
-        public string? GrapeName { get; set; } = null;
+        public string GrapeName { get; set; } = null;
     }
 }

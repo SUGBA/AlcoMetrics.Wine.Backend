@@ -67,5 +67,40 @@ namespace WebApp.Controllers.WineMakerControllers
         {
             return await _projectsPageService.CreateTimeLineByAllParamsAsync(model);
         }
+
+        /// <summary>
+        /// Создание таймлайна по показанию ареометра
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("CreateTimeLineByAreometer")]
+        [Authorize(Roles = "WineMaker")]
+        public async Task<CreateProjectResponse> CreateTimeLineByAllParams([FromBody] CreateProjectModelByAreometer model)
+        {
+            return await _projectsPageService.CreateTimeLineByAreometerAsync(model);
+        }
+
+        /// <summary>
+        /// Создание таймлайна по сорту винограда
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("CreateTimeLineByGrapeVarety")]
+        [Authorize(Roles = "WineMaker")]
+        public async Task<CreateProjectResponse> CreateTimeLineByAllParams([FromBody] CreateProjectModelByGrapeVarety model)
+        {
+            return await _projectsPageService.CreateTimeLineByGrapeVaretyAsync(model);
+        }
+
+        /// <summary>
+        /// Получить список сортов винограда
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetGrapeVarieties")]
+        [Authorize(Roles = "WineMaker")]
+        public async Task<IEnumerable<string>> GetGrapeVarieties()
+        {
+            return await _projectsPageService.GetGrapeVarietiesAsync();
+        }
     }
 }

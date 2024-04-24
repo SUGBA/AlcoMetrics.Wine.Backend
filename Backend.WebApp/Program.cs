@@ -28,8 +28,6 @@ namespace Backend.WebApp
                     });
             });
 
-            builder.Services.AddCors();
-
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -67,7 +65,7 @@ namespace Backend.WebApp
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors();
+            app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();

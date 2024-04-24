@@ -49,5 +49,11 @@ namespace WebApp.UseCases.ProjectsPage.Abstract
         /// <param name="request"> Данные для генерации таймлайна </param>
         /// <returns></returns>
         Task<CreateProjectResponse> CreateTimeLineByGrapeVaretyAsync(CreateProjectModelByGrapeVarety request);
+
+        /// <summary>
+        /// Получить список сортов винограда
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<string>> GetGrapeVarietiesAsync();
     }
 }

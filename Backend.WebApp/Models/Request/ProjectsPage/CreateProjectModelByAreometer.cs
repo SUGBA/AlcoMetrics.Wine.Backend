@@ -11,6 +11,6 @@ namespace WebApp.Models.Request.ProjectsPage
         /// Показания Ареометра
         /// </summary>
         [JsonPropertyName("AreometerValue")]
-        public float? AreometerValue { get; set; }
+        public int AreometerValue { get; set; }
     }
 }

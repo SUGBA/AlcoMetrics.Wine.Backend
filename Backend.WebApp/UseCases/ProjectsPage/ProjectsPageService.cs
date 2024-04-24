@@ -1,6 +1,9 @@
-﻿using Core.Actions.Abstractions.TimelineCorrector;
+﻿using Core.Actions.Abstractions.DataBaseConnector;
+using Core.Actions.Abstractions.TimelineCorrector;
 using Core.Actions.Abstractions.TimeLineCreator;
+using Core.Actions.Abstractions.TImeLineIndicatorConverter;
 using Core.Models.WineRealizations;
+using Core.Models.WineRealizations.Enums;
 using DataBase.EF.ConnectionFroWine.Repository;
 using WebApp.Models.Request.ProjectsPage;
 using WebApp.Models.Response.ProjectsPage;
@@ -18,6 +21,8 @@ namespace WebApp.UseCases.ProjectsPage
 
         private const string NULL_USER_ID_ERROR = "Не удалось получить данные о пользователе";
 
+        private const string NULL_GRAPE_VARETY_ERROR = "Не удалось получить данные о пользователе";
+
         /// <summary>
         /// Создатель TimeLine'a
         /// </summary>
@@ -28,16 +33,27 @@ namespace WebApp.UseCases.ProjectsPage
         /// </summary>
         private readonly BaseTimelineCorrector<WineTimeLine, WineIndicator> _timelineCorrector;
 
+        /// <summary>
+        /// Фабрика для получения конвертера по типу начальных данных
+        /// </summary>
+        private readonly IIndicatorConverterFactory<InitialIndicatorTypes, WineIndicator> _indicatorFactory;
+
         private readonly IProjectPageServiceRepository _repository;
+
+        private readonly IBaseGenericRepository<GrapeVariety> _grapeVarietyRepository;
 
         public ProjectsPageService(IProjectPageServiceRepository repository,
             IHttpContextAccessor httpContextAccessor,
              BaseTimeLineCreator<WineIndicator, WineTimeLine, WineDay> timeLineCreator,
-             BaseTimelineCorrector<WineTimeLine, WineIndicator> timelineCorrector) : base(httpContextAccessor)
+             BaseTimelineCorrector<WineTimeLine, WineIndicator> timelineCorrector,
+             IIndicatorConverterFactory<InitialIndicatorTypes, WineIndicator> indicatorFactory,
+             IBaseGenericRepository<GrapeVariety> grapeVarietyRepository) : base(httpContextAccessor)
         {
             _repository = repository;
             _timeLineCreator = timeLineCreator;
             _timelineCorrector = timelineCorrector;
+            _indicatorFactory = indicatorFactory;
+            _grapeVarietyRepository = grapeVarietyRepository;
         }
 
         /// <summary>
@@ -82,13 +98,11 @@ namespace WebApp.UseCases.ProjectsPage
 
             await _repository.AddTimeLineAsync(timeLine);
 
-            var dbTimeLine = _repository.GetAll().FirstOrDefault(timeLine);
-
             var response = new ProjectResponse()        //Формируем ответ
             {
-                ProjectName = dbTimeLine.TimeLineName,
-                Id = dbTimeLine.Id,
-                EventCount = dbTimeLine.Days.FirstOrDefault(d => d.CurrentDate == DateTime.Now)?.Events.Count ?? 0
+                ProjectName = timeLine.TimeLineName,
+                Id = timeLine.Id,
+                EventCount = timeLine.Days.FirstOrDefault(d => d.CurrentDate == DateTime.Now)?.Events.Count ?? 0
             };
 
             return new CreateProjectResponse() { CreatedProject = response };
@@ -99,9 +113,36 @@ namespace WebApp.UseCases.ProjectsPage
         /// </summary>
         /// <param name="request"> Данные для генерации таймлайна </param>
         /// <returns></returns>
-        public Task<CreateProjectResponse> CreateTimeLineByAreometerAsync(CreateProjectModelByAreometer request)
+        public async Task<CreateProjectResponse> CreateTimeLineByAreometerAsync(CreateProjectModelByAreometer request)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(request.ProjectName))
+                return new CreateProjectResponse() { Error = NULL_PROJECT_NAME_ERRPR };
+
+            WineIndicator desiredIndicator = new WineIndicator() { SugarValue = request.DesiredSugarValue, EthanolValue = request.DesiredAlcoholValue };
+
+            var indicatorConverter = _indicatorFactory.GetIndicatorConverter(InitialIndicatorTypes.ByAreometr, request.AreometerValue);
+            if (indicatorConverter == null) throw new Exception("Не удалось получить конвертер для получения показателя по показаниям ареометра");
+            var indicator = indicatorConverter.GetIndicator();
+
+            var timeLine = _timeLineCreator.GetTimeLine(indicator);        //Генерируем TimeLine
+            timeLine.TimeLineName = request.ProjectName;
+            _timelineCorrector.CorrectTimeLIne(timeLine, desiredIndicator); //Корректируем события согласно заданым мероприятиям
+
+            var currentUserId = GetUserId();
+            if (currentUserId == null)
+                return new CreateProjectResponse() { Error = NULL_USER_ID_ERROR };
+            timeLine.UserId = (int)currentUserId;
+
+            await _repository.AddTimeLineAsync(timeLine);
+
+            var response = new ProjectResponse()        //Формируем ответ
+            {
+                ProjectName = timeLine.TimeLineName,
+                Id = timeLine.Id,
+                EventCount = timeLine.Days.FirstOrDefault(d => d.CurrentDate == DateTime.Now)?.Events.Count ?? 0
+            };
+
+            return new CreateProjectResponse() { CreatedProject = response };
         }
 
         /// <summary>
@@ -109,9 +150,39 @@ namespace WebApp.UseCases.ProjectsPage
         /// </summary>
         /// <param name="request"> Данные для генерации таймлайна </param>
         /// <returns></returns>
-        public Task<CreateProjectResponse> CreateTimeLineByGrapeVaretyAsync(CreateProjectModelByGrapeVarety request)
+        public async Task<CreateProjectResponse> CreateTimeLineByGrapeVaretyAsync(CreateProjectModelByGrapeVarety request)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(request.ProjectName))
+                return new CreateProjectResponse() { Error = NULL_PROJECT_NAME_ERRPR };
+
+            if (string.IsNullOrEmpty(request.GrapeName))
+                return new CreateProjectResponse() { Error = NULL_GRAPE_VARETY_ERROR };
+
+            WineIndicator desiredIndicator = new WineIndicator() { SugarValue = request.DesiredSugarValue, EthanolValue = request.DesiredAlcoholValue };
+
+            var indicatorConverter = _indicatorFactory.GetIndicatorConverter(InitialIndicatorTypes.ByGrapeVariety, request.GrapeName);
+            if (indicatorConverter == null) throw new Exception("Не удалось получить конвертер для получения показателя по сорту винограда");
+            var indicator = indicatorConverter.GetIndicator();
+
+            var timeLine = _timeLineCreator.GetTimeLine(indicator);        //Генерируем TimeLine
+            timeLine.TimeLineName = request.ProjectName;
+            _timelineCorrector.CorrectTimeLIne(timeLine, desiredIndicator); //Корректируем события согласно заданым мероприятиям
+
+            var currentUserId = GetUserId();
+            if (currentUserId == null)
+                return new CreateProjectResponse() { Error = NULL_USER_ID_ERROR };
+            timeLine.UserId = (int)currentUserId;
+
+            await _repository.AddTimeLineAsync(timeLine);
+
+            var response = new ProjectResponse()        //Формируем ответ
+            {
+                ProjectName = timeLine.TimeLineName,
+                Id = timeLine.Id,
+                EventCount = timeLine.Days.FirstOrDefault(d => d.CurrentDate == DateTime.Now)?.Events.Count ?? 0
+            };
+
+            return new CreateProjectResponse() { CreatedProject = response };
         }
 
         /// <summary>
@@ -123,6 +194,16 @@ namespace WebApp.UseCases.ProjectsPage
         {
             var result = await _repository.DeleteAsync(id);
             return result;
+        }
+
+        /// <summary>
+        /// Получить список сортов винограда
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<string>> GetGrapeVarietiesAsync()
+        {
+            var grapeVarieties = await _grapeVarietyRepository.GetAllAsync();
+            return grapeVarieties.Select(x => x.GrapeVarietyName);
         }
 
         /// <summary>

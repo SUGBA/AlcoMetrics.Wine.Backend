@@ -48,41 +48,6 @@ namespace Tests
         }
 
         /// <summary>
-        /// Проверка на корректность получения ByWineIndicatorConverter с верным типом
-        /// </summary>
-        [Fact]
-        public void GettingWineWithCorrectParameter()
-        {
-            var type = InitialIndicatorTypes.ByIndicator;
-            var parameter = new WineIndicator() { NitrogenValue = 12, EthanolValue = 0, SugarValue = 5, WortValue = 40 };
-            var _areometrRepository = new BaseWineRepository<AreometrDefaultValue>();
-            var _grapeVarietyRepository = new BaseWineRepository<GrapeVariety>();
-            var _calculatorFactory = new CalculatorFactory();
-            var _calculator = new UnitsCalculator(_calculatorFactory);
-            var factory = new WineIndicatorConverterFactory(_areometrRepository, _grapeVarietyRepository, _calculator);
-
-            var result = factory.GetIndicatorConverter(type, parameter);
-
-            Assert.IsType<ByWineIndicatorConverter>(result);
-        }
-        /// <summary>
-        /// Проверка на корректность получения ByWineIndicatorConverter с не верным типом
-        /// </summary>
-        [Fact]
-        public void GettingWineWithIncorrectParameter()
-        {
-            var type = InitialIndicatorTypes.ByIndicator;
-            var parameter = "some type";
-            var _areometrRepository = new BaseWineRepository<AreometrDefaultValue>();
-            var _grapeVarietyRepository = new BaseWineRepository<GrapeVariety>();
-            var _calculatorFactory = new CalculatorFactory();
-            var _calculator = new UnitsCalculator(_calculatorFactory);
-            var factory = new WineIndicatorConverterFactory(_areometrRepository, _grapeVarietyRepository, _calculator);
-
-            Assert.Throws<Exception>(() => factory.GetIndicatorConverter(type, parameter));
-        }
-
-        /// <summary>
         /// Проверка на корректность получения ByGrapeVarietyIndicatorConverter с верным типом
         /// </summary>
         [Fact]
