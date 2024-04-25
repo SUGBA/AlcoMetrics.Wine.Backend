@@ -1,12 +1,12 @@
 ﻿using WebApp.Models.Request.ProjectsPage;
 using WebApp.Models.Response.ProjectsPage;
 
-namespace WebApp.UseCases.ProjectsPage.Abstract
+namespace WebApp.UseCases.Projects.Abstract
 {
     /// <summary>
     /// Сервис для контроллера ProjectsPage
     /// </summary>
-    public interface IProjectsPageService
+    public interface IProjectsService
     {
         /// <summary>
         /// Получить список мероприятий

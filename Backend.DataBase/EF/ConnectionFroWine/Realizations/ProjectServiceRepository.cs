@@ -7,7 +7,7 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
     /// <summary>
     /// Реализация репозитория для модуля ProjectPage
     /// </summary>
-    public class ProjectPageServiceRepository : BaseWineRepository<WineTimeLine>, IProjectPageServiceRepository
+    public class ProjectServiceRepository : BaseWineRepository<WineTimeLine>, IProjectServiceRepository
     {
         public async Task AddTimeLineAsync(WineTimeLine timeLine)
         {

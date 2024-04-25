@@ -11,8 +11,9 @@ namespace WebApp.Extensions
     {
         public static void AddRepository(this WebApplicationBuilder applicationBuilder)
         {
+            applicationBuilder.Services.AddScoped<ITimeLineServiceRepository, TimeLineServiceRepository>();
             applicationBuilder.Services.AddScoped(typeof(IBaseGenericRepository<>), typeof(BaseWineRepository<>));
-            applicationBuilder.Services.AddScoped<IProjectPageServiceRepository, ProjectPageServiceRepository>();
+            applicationBuilder.Services.AddScoped<IProjectServiceRepository, ProjectServiceRepository>();
         }
     }
 }

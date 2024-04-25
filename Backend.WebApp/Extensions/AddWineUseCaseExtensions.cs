@@ -1,6 +1,8 @@
 ﻿using WebApp.UseCases.Base.Abstract;
-using WebApp.UseCases.ProjectsPage;
-using WebApp.UseCases.ProjectsPage.Abstract;
+using WebApp.UseCases.Projects;
+using WebApp.UseCases.Projects.Abstract;
+using WebApp.UseCases.TImeLine;
+using WebApp.UseCases.TImeLine.Abstract;
 
 namespace WebApp.Extensions
 {
@@ -11,8 +13,9 @@ namespace WebApp.Extensions
     {
         public static void ConfigureWineUseCases(this WebApplicationBuilder applicationBuilder)
         {
-            applicationBuilder.Services.AddTransient<BaseWineService>();
-            applicationBuilder.Services.AddTransient<IProjectsPageService, ProjectsPageService>();
+            applicationBuilder.Services.AddScoped<ITimeLineService, TimeLineService>();
+            applicationBuilder.Services.AddScoped<BaseWineService>();
+            applicationBuilder.Services.AddScoped<IProjectsService, ProjectsService>();
         }
     }
 }

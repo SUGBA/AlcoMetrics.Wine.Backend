@@ -8,14 +8,14 @@ using DataBase.EF.ConnectionFroWine.Repository;
 using WebApp.Models.Request.ProjectsPage;
 using WebApp.Models.Response.ProjectsPage;
 using WebApp.UseCases.Base.Abstract;
-using WebApp.UseCases.ProjectsPage.Abstract;
+using WebApp.UseCases.Projects.Abstract;
 
-namespace WebApp.UseCases.ProjectsPage
+namespace WebApp.UseCases.Projects
 {
     /// <summary>
     /// Сервис для контроллера ProjectsPage
     /// </summary>
-    public class ProjectsPageService : BaseWineService, IProjectsPageService
+    public class ProjectsService : BaseWineService, IProjectsService
     {
         private const string NULL_PROJECT_NAME_ERRPR = "Имени проекта не было присвоено значение";
 
@@ -38,11 +38,11 @@ namespace WebApp.UseCases.ProjectsPage
         /// </summary>
         private readonly IIndicatorConverterFactory<InitialIndicatorTypes, WineIndicator> _indicatorFactory;
 
-        private readonly IProjectPageServiceRepository _repository;
+        private readonly IProjectServiceRepository _repository;
 
         private readonly IBaseGenericRepository<GrapeVariety> _grapeVarietyRepository;
 
-        public ProjectsPageService(IProjectPageServiceRepository repository,
+        public ProjectsService(IProjectServiceRepository repository,
             IHttpContextAccessor httpContextAccessor,
              BaseTimeLineCreator<WineIndicator, WineTimeLine, WineDay> timeLineCreator,
              BaseTimelineCorrector<WineTimeLine, WineIndicator> timelineCorrector,

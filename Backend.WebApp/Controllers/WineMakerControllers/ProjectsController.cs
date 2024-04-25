@@ -3,19 +3,19 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp.Controllers.Base;
 using WebApp.Models.Request.ProjectsPage;
 using WebApp.Models.Response.ProjectsPage;
-using WebApp.UseCases.ProjectsPage.Abstract;
+using WebApp.UseCases.Projects.Abstract;
 
 namespace WebApp.Controllers.WineMakerControllers
 {
     /// <summary>
     /// Контроллер для модуля со списком проектов
     /// </summary>
-    [Route("ProjectsPage")]
-    public class ProjectsPageController : BaseWineController
+    [Route("Projects")]
+    public class ProjectsController : BaseWineController
     {
-        private readonly IProjectsPageService _projectsPageService;
+        private readonly IProjectsService _projectsPageService;
 
-        public ProjectsPageController(IProjectsPageService projectsPageService)
+        public ProjectsController(IProjectsService projectsPageService)
         {
             _projectsPageService = projectsPageService;
         }
