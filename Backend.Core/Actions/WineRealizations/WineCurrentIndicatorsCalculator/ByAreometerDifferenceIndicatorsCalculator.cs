@@ -21,7 +21,7 @@ namespace Core.Actions.WineRealizations.WineCurrentIndicatorsCalculator
         /// </summary>
         private double areometerCurrentValue;
 
-        public ByAreometerDifferenceIndicatorsCalculator(double areometerStartValue, double areometerCurrentValue,
+        public ByAreometerDifferenceIndicatorsCalculator(int areometerStartValue, int areometerCurrentValue,
             IBaseGenericRepository<DifferenceAreometrDefaultValue> repository)
         {
             this.areometerStartValue = areometerStartValue;
@@ -33,7 +33,7 @@ namespace Core.Actions.WineRealizations.WineCurrentIndicatorsCalculator
         {
             //Сахар: г/100см3
             //Спирт: %
-            var differenceValue = (int)((areometerStartValue - areometerCurrentValue) * 1000);
+            var differenceValue = (int)(areometerStartValue - areometerCurrentValue);
             var indicator = repository.GetAll().Where(x => x.DifferenceAreometerValue == differenceValue).FirstOrDefault();
             if (indicator == null) throw new Exception("Некорректное значение разницы показаний Ареометра");
             return new WineIndicator() { SugarValue = indicator.SugarValue, EthanolValue = indicator.EthanolValue };

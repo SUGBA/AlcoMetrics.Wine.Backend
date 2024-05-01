@@ -42,11 +42,12 @@ namespace Core.Actions.Abstractions.TimeLineCreator
         /// <param name="indicator"> Начальный показания сусла </param>
         /// <param name="startTime"> Начало прогноза </param>
         /// <param name="endTime"> До какого дня будет рассчитываться (без учета корректировки) </param>
+        /// <param name="startDateTime"> Дата с которой начнется счет дат для дней </param>
         /// <returns></returns>
-        public TL GetTimeLine(I indicator, int startTime, int endTime)
+        public TL GetTimeLine(I indicator, int startTime, int endTime, DateTime? startDateTime = null)
         {
             var baseCalculatedTimeLine = Calculate(indicator, startTime, endTime);      //Рассчитали
-            var convertedTimeLine = Convert(baseCalculatedTimeLine);                    //Спарсили
+            var convertedTimeLine = Convert(baseCalculatedTimeLine, startDateTime);                    //Спарсили
             convertedTimeLine = Correct(convertedTimeLine);                             //Скорректировали
             return convertedTimeLine;
         }
@@ -77,7 +78,7 @@ namespace Core.Actions.Abstractions.TimeLineCreator
         /// </summary>
         /// <param name="vectors"></param>
         /// <returns></returns>
-        protected abstract TL Convert(Vector<double>[] vectors);
+        protected abstract TL Convert(Vector<double>[] vectors, DateTime? startDateTime = null);
 
         /// <summary>
         /// Корректировки модели таймлайна

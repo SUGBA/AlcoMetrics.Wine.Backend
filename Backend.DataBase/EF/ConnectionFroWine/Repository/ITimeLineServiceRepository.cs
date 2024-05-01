@@ -1,12 +1,11 @@
-﻿using Core.Actions.Abstractions.DataBaseConnector;
-using Core.Models.WineRealizations;
+﻿using Core.Models.WineRealizations;
 
 namespace DataBase.EF.ConnectionFroWine.Repository
 {
     /// <summary>
     /// Репозиторий для модуля со списком дней для проекта
     /// </summary>
-    public interface ITimeLineServiceRepository : IBaseGenericRepository<WineDay>
+    public interface ITimeLineServiceRepository
     {
         /// <summary>
         /// Получить список дней с включением показателей

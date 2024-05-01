@@ -22,8 +22,8 @@ namespace Core.Actions.WineRealizations.WineCurrentIndicatorsCalculator
             switch (type)
             {
                 case UpdateIndicatorTypes.ByAreometr:
-                    if (param[0] is double && param[1] is double)
-                        return new ByAreometerDifferenceIndicatorsCalculator((double)param[0], (double)param[1], differenceAreometRrepository);
+                    if (param[0] is int && param[1] is int)
+                        return new ByAreometerDifferenceIndicatorsCalculator((int)param[0], (int)param[1], differenceAreometRrepository);
                     throw new Exception("Некорректные параметры");
                 default:
                     throw new Exception("Несущесвтующий способ определения актуальных показатеелй");

@@ -60,7 +60,14 @@ namespace Core.Models.Abstractions
     /// </summary>
     public enum EventCustomTypes
     {
+        /// <summary>
+        /// Системное
+        /// </summary>
         System = 1,
+
+        /// <summary>
+        /// Пользовательское
+        /// </summary>
         Custom = 2
     }
 }

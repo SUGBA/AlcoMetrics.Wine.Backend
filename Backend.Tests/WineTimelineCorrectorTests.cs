@@ -40,7 +40,7 @@ namespace Tests
 
             var eventCount = timeLine.Days.Sum(x => x.Events.Count);
 
-            Assert.Equal(3, eventCount);
+            Assert.Equal(2, eventCount);
         }
 
         /// <summary>

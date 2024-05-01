@@ -25,6 +25,7 @@ namespace Core.Actions.WineRealizations.WineTimeLineCalculator
         private const double DEFAUL_NITROGEN_VALUE = 0.25;
         private const double DEFAUL_ETHANOL_VALUE = 0.25;
         private const double DEFAUL_SUGAR_VALUE = 0.25;
+        private const double DEFAUL_WORT_VALUE = 0;
 
         #endregion
 
@@ -59,7 +60,8 @@ namespace Core.Actions.WineRealizations.WineTimeLineCalculator
             var nValue = indicator.NitrogenValue == default(double) ? DEFAUL_NITROGEN_VALUE : indicator.NitrogenValue;
             var eValue = indicator.EthanolValue == default(double) ? DEFAUL_ETHANOL_VALUE : indicator.EthanolValue;
             var sValue = indicator.SugarValue == default(double) ? DEFAUL_SUGAR_VALUE : indicator.SugarValue;
-            var result = GetTimeLine(xValue, nValue, eValue, sValue, startTime, endTime);
+            var wValue = indicator.WortValue == default(double) ? DEFAUL_WORT_VALUE : indicator.WortValue;
+            var result = GetTimeLine(xValue, nValue, eValue, sValue, wValue, startTime, endTime);
             return result;
         }
 
@@ -72,29 +74,42 @@ namespace Core.Actions.WineRealizations.WineTimeLineCalculator
         /// <param name="sValue"> Уровень сахара </param>
         /// <param name="startTime"> День с которого начинается прогнозирование </param>
         /// <param name="endTime"> День которым завершается прогнозирование </param>
+        /// <param name="wValue"> Объем сусла </param>
         /// <returns></returns>
-        private Vector<double>[] GetTimeLine(double xValue, double nValue, double eValue, double sValue, int startTime, int endTime)
+        private Vector<double>[] GetTimeLine(double xValue, double nValue, double eValue, double sValue, double wValue, int startTime, int endTime)
         {
             var startValues = Vector<double>.Build.Dense(new[] { xValue, nValue, eValue, sValue });
             Func<double, Vector<double>, Vector<double>> der = DerivativeMaker();
 
             Vector<double>[] res = RungeKutta.FourthOrder(startValues, startTime, endTime, endTime, der);
 
-            double[] x = new double[endTime];
-            double[] n = new double[endTime];
-            double[] e = new double[endTime];
-            double[] s = new double[endTime];
-
-            for (int i = 0; i < endTime; i++)
+            for (int i = 0; i < res.Length; i++)
             {
-                double[] temp = res[i].ToArray();
-                x[i] = temp[0];     //Милиграмм/Литр
-                n[i] = temp[1];     //Милиграмм/Литр
-                e[i] = temp[2];     //Грамм/Литр
-                s[i] = temp[3];     //Грамм/Литр
+                res[i] = AddItemToVector(res[i], wValue);
             }
 
             return res;
+        }
+
+        /// <summary>
+        /// Метод добавления элемент к вектору
+        /// Такие присядания из-за того, что MathNet.Numerics не содержит методов для добавления элементов в вектор
+        /// </summary>
+        /// <param name="startVector"> Вектор к которому добавляют значение </param>
+        /// <param name="item"> Добавляемое значение </param>
+        /// <returns></returns>
+        private Vector<double> AddItemToVector(Vector<double> startVector, double item)
+        {
+            // Создаем новый вектор, добавляя новый элемент
+            Vector<double> extendedVector = Vector<double>.Build.Dense(startVector.Count + 1);
+            for (int i = 0; i < startVector.Count; i++)
+            {
+                extendedVector[i] = startVector[i];
+            }
+            // Добавляем новый элемент в конец
+            extendedVector[startVector.Count] = item;
+
+            return extendedVector;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Core.Models.WineRealizations;
+using DataBase.EF.ConnectionFroWine.DbContexts;
 using DataBase.EF.ConnectionFroWine.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,13 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
     /// </summary>
     public class ProjectServiceRepository : BaseWineRepository<WineTimeLine>, IProjectServiceRepository
     {
+        /// <summary>
+        /// Контекст
+        /// </summary>
+        private WineDbContext _context;
+
+        public ProjectServiceRepository() => _context = new WineDbContext();
+
         public async Task AddTimeLineAsync(WineTimeLine timeLine)
         {
 

@@ -21,8 +21,8 @@ namespace Tests
             var differenceAreometRrepository = new BaseWineRepository<DifferenceAreometrDefaultValue>();
             var factory = new WineCurrentIndicatorsCalculatorFactory(differenceAreometRrepository);
             var type = UpdateIndicatorTypes.ByAreometr;
-            var startValue = 1.040;
-            var currentValue = 1.034;
+            var startValue = 1040;
+            var currentValue = 1034;
 
             var result = factory.GetCurrentIndicatorsCalculator(type, new object[] { startValue, currentValue });
 
@@ -70,8 +70,8 @@ namespace Tests
             var differenceAreometRrepository = new BaseWineRepository<DifferenceAreometrDefaultValue>();
             var factory = new WineCurrentIndicatorsCalculatorFactory(differenceAreometRrepository);
             var type = UpdateIndicatorTypes.ByAreometr;
-            var startValue = 1.040;
-            var currentValue = 1.034;
+            var startValue = 1040;
+            var currentValue = 1034;
 
             var calcualtor = factory.GetCurrentIndicatorsCalculator(type, new object[] { startValue, currentValue });
             var result = calcualtor!.Calculate();
@@ -90,8 +90,8 @@ namespace Tests
             var differenceAreometRrepository = new BaseWineRepository<DifferenceAreometrDefaultValue>();
             var factory = new WineCurrentIndicatorsCalculatorFactory(differenceAreometRrepository);
             var type = UpdateIndicatorTypes.ByAreometr;
-            var startValue = 1.04;
-            var currentValue = 1.05;
+            var startValue = 1040;
+            var currentValue = 1050;
 
             var calcualtor = factory.GetCurrentIndicatorsCalculator(type, new object[] { startValue, currentValue });
             Assert.Throws<Exception>(() => calcualtor!.Calculate());
@@ -111,8 +111,8 @@ namespace Tests
             var factory = new WineCurrentIndicatorsCalculatorFactory(differenceAreometRrepository);
             var worker = new WineCurrentIndicatorCalculatorWorker(unitsCalculator, factory);
             var type = UpdateIndicatorTypes.ByAreometr;
-            var startValue = 1.04;
-            var currentValue = 1.034;
+            var startValue = 1040;
+            var currentValue = 1034;
 
             var result = worker.Calculate(type, new object[] { startValue, currentValue });
 

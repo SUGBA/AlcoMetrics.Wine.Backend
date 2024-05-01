@@ -1,7 +1,9 @@
-﻿using Core.Actions.Abstractions.DataBaseConnector;
+﻿using Core.Actions.Abstractions.CalculatorUnitsMeasurement;
+using Core.Actions.Abstractions.DataBaseConnector;
 using Core.Actions.Abstractions.TimelineCorrector;
 using Core.Actions.Abstractions.TimeLineCreator;
 using Core.Actions.Abstractions.TImeLineIndicatorConverter;
+using Core.Actions.ShareRealizations.CalculatorUnitsMeasurement;
 using Core.Models.WineRealizations;
 using Core.Models.WineRealizations.Enums;
 using DataBase.EF.ConnectionFroWine.Repository;
@@ -22,6 +24,11 @@ namespace WebApp.UseCases.Projects
         private const string NULL_USER_ID_ERROR = "Не удалось получить данные о пользователе";
 
         private const string NULL_GRAPE_VARETY_ERROR = "Не удалось получить данные о пользователе";
+
+        /// <summary>
+        /// Калькулятор систем исчислений
+        /// </summary>
+        private readonly IBaseUnitsCalculator<MeasurementUnits> _calculator;
 
         /// <summary>
         /// Создатель TimeLine'a
@@ -47,13 +54,15 @@ namespace WebApp.UseCases.Projects
              BaseTimeLineCreator<WineIndicator, WineTimeLine, WineDay> timeLineCreator,
              BaseTimelineCorrector<WineTimeLine, WineIndicator> timelineCorrector,
              IIndicatorConverterFactory<InitialIndicatorTypes, WineIndicator> indicatorFactory,
-             IBaseGenericRepository<GrapeVariety> grapeVarietyRepository) : base(httpContextAccessor)
+             IBaseGenericRepository<GrapeVariety> grapeVarietyRepository,
+             IBaseUnitsCalculator<MeasurementUnits> calculator) : base(httpContextAccessor)
         {
             _repository = repository;
             _timeLineCreator = timeLineCreator;
             _timelineCorrector = timelineCorrector;
             _indicatorFactory = indicatorFactory;
             _grapeVarietyRepository = grapeVarietyRepository;
+            _calculator = calculator;
         }
 
         /// <summary>
@@ -86,6 +95,8 @@ namespace WebApp.UseCases.Projects
             //Получаем из модельки текущие показатели и желаемые
             WineIndicator indicator = new WineIndicator() { EthanolValue = request.AlcoholValue, SugarValue = request.SugarValue, WortValue = request.Wort };
             WineIndicator desiredIndicator = new WineIndicator() { SugarValue = request.DesiredSugarValue, EthanolValue = request.DesiredAlcoholValue };
+
+            indicator.EthanolValue = _calculator.Calculate(MeasurementUnits.Percentage, MeasurementUnits.GramPerLiter, indicator.EthanolValue);     //Показания спирта в Г/Л
 
             var timeLine = _timeLineCreator.GetTimeLine(indicator);        //Генерируем TimeLine
             timeLine.TimeLineName = request.ProjectName;
@@ -126,6 +137,7 @@ namespace WebApp.UseCases.Projects
 
             var timeLine = _timeLineCreator.GetTimeLine(indicator);        //Генерируем TimeLine
             timeLine.TimeLineName = request.ProjectName;
+            timeLine.StartAreometerValue = request.AreometerValue;
             _timelineCorrector.CorrectTimeLIne(timeLine, desiredIndicator); //Корректируем события согласно заданым мероприятиям
 
             var currentUserId = GetUserId();
@@ -158,11 +170,12 @@ namespace WebApp.UseCases.Projects
             if (string.IsNullOrEmpty(request.GrapeName))
                 return new CreateProjectResponse() { Error = NULL_GRAPE_VARETY_ERROR };
 
-            WineIndicator desiredIndicator = new WineIndicator() { SugarValue = request.DesiredSugarValue, EthanolValue = request.DesiredAlcoholValue };
+            WineIndicator desiredIndicator = new WineIndicator() { SugarValue = request.DesiredSugarValue, EthanolValue = request.DesiredAlcoholValue};
 
             var indicatorConverter = _indicatorFactory.GetIndicatorConverter(InitialIndicatorTypes.ByGrapeVariety, request.GrapeName);
             if (indicatorConverter == null) throw new Exception("Не удалось получить конвертер для получения показателя по сорту винограда");
             var indicator = indicatorConverter.GetIndicator();
+            indicator.WortValue = request.Wort;
 
             var timeLine = _timeLineCreator.GetTimeLine(indicator);        //Генерируем TimeLine
             timeLine.TimeLineName = request.ProjectName;

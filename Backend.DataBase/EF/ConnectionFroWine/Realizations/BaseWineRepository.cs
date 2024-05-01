@@ -14,12 +14,12 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
         /// <summary>
         /// Контекст
         /// </summary>
-        protected WineDbContext _context;
+        private WineDbContext _context;
 
         /// <summary>
         /// Таблица
         /// </summary>
-        protected DbSet<T> table;
+        private DbSet<T> table;
 
         public BaseWineRepository()
         {
