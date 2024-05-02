@@ -63,5 +63,16 @@ namespace WebApp.Controllers.WineMakerControllers
         {
             return await _timeLineDayService.UpdateDayIndicatorsByAreometerAsync(model);
         }
+
+        /// <summary>
+        /// Точка для добавления события крепления
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("AddAlcoholizationEvent")]
+        [Authorize(Roles = "WineMaker")]
+        public async Task<CurrentDayEventsResponse?> AddAlcoholizationEvent([FromBody] AddAlcoholizationEvent model)
+        {
+            return await _timeLineDayService.AddAlcoholizationEventAsync(model);
+        }
     }
 }

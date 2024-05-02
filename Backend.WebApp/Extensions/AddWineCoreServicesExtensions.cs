@@ -1,12 +1,14 @@
 ﻿using Core.Actions.Abstractions.CalculatorUnitsMeasurement;
 using Core.Actions.Abstractions.CurrentIndicatorsCalculator;
 using Core.Actions.Abstractions.DataBaseConnector;
+using Core.Actions.Abstractions.EventCalculator;
 using Core.Actions.Abstractions.TimeLineCalculator;
 using Core.Actions.Abstractions.TimelineCorrector;
 using Core.Actions.Abstractions.TimeLineCreator;
 using Core.Actions.Abstractions.TImeLineIndicatorConverter;
 using Core.Actions.ShareRealizations.CalculatorUnitsMeasurement;
 using Core.Actions.WineRealizations.WineCurrentIndicatorsCalculator;
+using Core.Actions.WineRealizations.WineEventCalculator;
 using Core.Actions.WineRealizations.WineIndicatorConverter;
 using Core.Actions.WineRealizations.WineTimeLineCalculator;
 using Core.Actions.WineRealizations.WineTimelineCorrector;
@@ -28,15 +30,17 @@ namespace WebApp.Extensions
         /// <param name="applicationBuilder"></param>
         public static void AddWineCoreServices(this WebApplicationBuilder applicationBuilder)
         {
-            applicationBuilder.Services.AddTransient<ITimeLineEventChainCreator<WineTimeLine, WineIndicator>, ShaptalizationAlcoholizationChainCreater>();
-            applicationBuilder.Services.AddTransient<BaseTimelineCorrector<WineTimeLine, WineIndicator>, WineTimelineCorrector>();
-            applicationBuilder.Services.AddTransient<IBaseCalculatorFactory<MeasurementUnits>, CalculatorFactory>();
-            applicationBuilder.Services.AddTransient<IBaseUnitsCalculator<MeasurementUnits>, UnitsCalculator>();
-            applicationBuilder.Services.AddTransient<BaseTimeLineCalculator<WineIndicator>, WIneTimeLineCalculator>();
-            applicationBuilder.Services.AddTransient<IIndicatorConverterFactory<InitialIndicatorTypes, WineIndicator>, WineIndicatorConverterFactory>();
-            applicationBuilder.Services.AddTransient<BaseTimeLineCreator<WineIndicator, WineTimeLine, WineDay>, WineTimeLineCreator>();
-            applicationBuilder.Services.AddTransient<IBaseCurrentIndicatorsCalculatorFactory<UpdateIndicatorTypes, WineIndicator>, WineCurrentIndicatorsCalculatorFactory>();
-            applicationBuilder.Services.AddTransient<BaseCurrentIndicatorCalculatorWorker<UpdateIndicatorTypes, WineIndicator>, WineCurrentIndicatorCalculatorWorker>();
+            applicationBuilder.Services.AddScoped<ITimeLineEventChainCreator<WineTimeLine, WineIndicator>, ShaptalizationAlcoholizationChainCreater>();
+            applicationBuilder.Services.AddScoped<BaseTimelineCorrector<WineTimeLine, WineIndicator>, WineTimelineCorrector>();
+            applicationBuilder.Services.AddScoped<IBaseCalculatorFactory<MeasurementUnits>, CalculatorFactory>();
+            applicationBuilder.Services.AddScoped<IBaseUnitsCalculator<MeasurementUnits>, UnitsCalculator>();
+            applicationBuilder.Services.AddScoped<BaseTimeLineCalculator<WineIndicator>, WIneTimeLineCalculator>();
+            applicationBuilder.Services.AddScoped<IIndicatorConverterFactory<InitialIndicatorTypes, WineIndicator>, WineIndicatorConverterFactory>();
+            applicationBuilder.Services.AddScoped<BaseTimeLineCreator<WineIndicator, WineTimeLine, WineDay>, WineTimeLineCreator>();
+            applicationBuilder.Services.AddScoped<IBaseCurrentIndicatorsCalculatorFactory<UpdateIndicatorTypes, WineIndicator>, WineCurrentIndicatorsCalculatorFactory>();
+            applicationBuilder.Services.AddScoped<BaseCurrentIndicatorCalculatorWorker<UpdateIndicatorTypes, WineIndicator>, WineCurrentIndicatorCalculatorWorker>();
+            applicationBuilder.Services.AddScoped<IBaseEventFactory<WineEventTypes, WineIndicator>, WineEventFactory>();
+            applicationBuilder.Services.AddScoped<BaseEventWorker<WineEventTypes, WineIndicator>, WineEventWorker>();
         }
     }
 }

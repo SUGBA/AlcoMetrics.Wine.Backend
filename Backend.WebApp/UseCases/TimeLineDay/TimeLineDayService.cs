@@ -1,8 +1,10 @@
 ﻿using Core.Actions.Abstractions.CalculatorUnitsMeasurement;
 using Core.Actions.Abstractions.CurrentIndicatorsCalculator;
 using Core.Actions.Abstractions.DataBaseConnector;
+using Core.Actions.Abstractions.EventCalculator;
 using Core.Actions.Abstractions.TimeLineCreator;
 using Core.Actions.ShareRealizations.CalculatorUnitsMeasurement;
+using Core.Models.Abstractions;
 using Core.Models.WineRealizations;
 using Core.Models.WineRealizations.Enums;
 using DataBase.EF.ConnectionFroWine.Repository;
@@ -39,6 +41,11 @@ namespace WebApp.UseCases.TimeLineDay
         private readonly IBaseUnitsCalculator<MeasurementUnits> _calculator;
 
         /// <summary>
+        /// Фасад для работы с мероприятиями
+        /// </summary>
+        private readonly BaseEventWorker<WineEventTypes, WineIndicator> _eventWorker;
+
+        /// <summary>
         /// Максимальное число дней на которое будет перерасчитываться TimeLine
         /// </summary>
         private const int MAX_DAY_COUNT = 100;
@@ -57,13 +64,15 @@ namespace WebApp.UseCases.TimeLineDay
             WineIndicator> currentIndicatorWorker,
             BaseTimeLineCreator<WineIndicator, WineTimeLine, WineDay> timeLineCreator,
             IBaseGenericRepository<WineDay> baseRepository,
-            IBaseUnitsCalculator<MeasurementUnits> calculator) : base(httpContextAccessor)
+            IBaseUnitsCalculator<MeasurementUnits> calculator,
+            BaseEventWorker<WineEventTypes, WineIndicator> eventWorker) : base(httpContextAccessor)
         {
             _repository = repository;
             _currentIndicatorWorker = currentIndicatorWorker;
             _timeLineCreator = timeLineCreator;
             _dayRepository = baseRepository;
             _calculator = calculator;
+            _eventWorker = eventWorker;
         }
 
         public async Task<CurrentDayIndicatrosResponse?> GetCurrentDayIndicatorsAsync(int dayId)
@@ -159,6 +168,48 @@ namespace WebApp.UseCases.TimeLineDay
             var result = firstPart.Concat(recalculatedDays.Days);
 
             return result.ToList();
+        }
+
+        public async Task<CurrentDayEventsResponse?> AddAlcoholizationEventAsync(AddAlcoholizationEvent request)
+        {
+            var userId = GetUserId() ?? throw new Exception("Пользователь с заданным Id не существует, при попытке получения показателей дня для добавления события крепления");
+
+            var currentDay = await _repository.GetDayWithIndicatorsAndTimeLineAsync(request.DayId, userId);
+            if (currentDay == null) return null;
+            var currentIndicator = currentDay.Indicator;
+
+            var desiredDay = await _repository.GetDayWithIndicatorsAndTimeLineAsync(request.DayId, userId);
+            if (desiredDay == null) return null;
+            var desiredIndicator = desiredDay.Indicator;
+            desiredIndicator.EthanolValue = request.DesiredAlcoholValue;
+            desiredIndicator.Id = 0;
+
+            var typicalEvent = await _repository.GetTypicalEventAsync(WineEventTypes.Alcoholization);
+            var newEvent = new WineEvent()
+            {
+                DesiredIndicator = desiredIndicator,
+                EventType = EventCustomTypes.Custom,
+                IsCompleted = false,
+                TypicalEvent = typicalEvent
+            };
+
+            await _repository.AddEventAsync(newEvent, request.DayId);
+            return Map<WineEvent, CurrentDayEventsResponse>(newEvent);
+        }
+
+        public Task<CurrentDayEventsResponse?> AddShaptalizationEventAsync(AddShaptalizationEvent request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<CurrentDayEventsResponse?> AddBlendingEventByAllParamsAsync(AddBlendingEventByAllParams request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<CurrentDayEventsResponse?> AddBlendingEventByProjectAsync(AddBlendingEventByProject request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

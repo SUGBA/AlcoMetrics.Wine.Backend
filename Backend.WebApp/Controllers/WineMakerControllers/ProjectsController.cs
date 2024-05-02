@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Controllers.Base;
-using WebApp.Models.Request.ProjectsPage;
+using WebApp.Models.Request.Projects;
 using WebApp.Models.Response.ProjectsPage;
 using WebApp.UseCases.Projects.Abstract;
 

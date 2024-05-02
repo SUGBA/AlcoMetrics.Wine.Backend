@@ -7,7 +7,7 @@ using Core.Actions.ShareRealizations.CalculatorUnitsMeasurement;
 using Core.Models.WineRealizations;
 using Core.Models.WineRealizations.Enums;
 using DataBase.EF.ConnectionFroWine.Repository;
-using WebApp.Models.Request.ProjectsPage;
+using WebApp.Models.Request.Projects;
 using WebApp.Models.Response.ProjectsPage;
 using WebApp.UseCases.Base.Abstract;
 using WebApp.UseCases.Projects.Abstract;

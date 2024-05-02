@@ -47,8 +47,8 @@ namespace Backend.WebApp
             builder.Services.AddHttpContextAccessor();
 
             builder.AddRepository();
-            builder.ConfigureWineUseCases();
             builder.AddWineCoreServices();
+            builder.ConfigureWineUseCases();
             builder.Services.AddTransient<IAccountService, AccountService>();
 
             var app = builder.Build();

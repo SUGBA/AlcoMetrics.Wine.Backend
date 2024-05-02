@@ -38,7 +38,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AreometrDefaultValues");
+                    b.ToTable("AreometrDefaultValues", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.WineRealizations.DifferenceAreometrDefaultValue", b =>
@@ -60,7 +60,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DifferenceAreometrDefaultValues");
+                    b.ToTable("DifferenceAreometrDefaultValues", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.WineRealizations.GrapeVariety", b =>
@@ -83,7 +83,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GrapeVarieties");
+                    b.ToTable("GrapeVarieties", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.WineRealizations.WineDay", b =>
@@ -109,7 +109,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
 
                     b.HasIndex("TimeLineId");
 
-                    b.ToTable("WineDays");
+                    b.ToTable("WineDays", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.WineRealizations.WineEvent", b =>
@@ -171,7 +171,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WineIndicators");
+                    b.ToTable("WineIndicators", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.WineRealizations.WineReferenceInformation", b =>
@@ -191,7 +191,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WineReferenceInformations");
+                    b.ToTable("WineReferenceInformations", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.WineRealizations.WineTimeLine", b =>
@@ -216,7 +216,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("WineTimeLines");
+                    b.ToTable("WineTimeLines", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.WineRealizations.WineTypicalEvent", b =>
@@ -236,7 +236,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WineTypicalEvents");
+                    b.ToTable("WineTypicalEvents", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.WineRealizations.WineUser", b =>
@@ -257,7 +257,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WineUsers");
+                    b.ToTable("WineUsers", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.WineRealizations.WineDay", b =>

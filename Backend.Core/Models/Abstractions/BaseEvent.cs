@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Core.Models.Abstractions
+﻿namespace Core.Models.Abstractions
 {
     /// <summary>
     /// Базовое событие
@@ -12,6 +6,7 @@ namespace Core.Models.Abstractions
     /// <typeparam name="S"> Типичное событие, для выбранного направления </typeparam>
     /// <typeparam name="BE"> День, для выбранного направления </typeparam>
     /// <typeparam name="I"> Индикатор </typeparam>
+    /// <typeparam name="BI"> Ингридиент </typeparam>
     public abstract class BaseEvent<S, BE, I> : BaseEntity
     {
         /// <summary>

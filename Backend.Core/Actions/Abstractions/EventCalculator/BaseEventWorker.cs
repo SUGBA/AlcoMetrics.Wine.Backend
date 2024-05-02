@@ -2,6 +2,11 @@
 
 namespace Core.Actions.Abstractions.EventCalculator
 {
+    /// <summary>
+    /// Базовый фасад для работы с событиями
+    /// </summary>
+    /// <typeparam name="T"> Enum для с типом добавляемого события </typeparam>
+    /// <typeparam name="I"> Тип показателя </typeparam>
     public abstract class BaseEventWorker<T, I> where T : Enum where I : BaseIndicator
     {
         /// <summary>
@@ -29,9 +34,9 @@ namespace Core.Actions.Abstractions.EventCalculator
         /// <returns></returns>
         public Dictionary<string, double>? CalculateEventIngredients(T eventType, I desiredIndicator, I currentIndicator, object[]? param = null)
         {
-            var calculator = GetCalculator(eventType, desiredIndicator, param);
+            var calculator = GetCalculator(eventType, currentIndicator, param);
 
-            var ingredients = calculator.Calculate(currentIndicator);
+            var ingredients = calculator.Calculate(desiredIndicator);
 
             ResultIndicator = calculator.ResultIndicator;
 

@@ -2,6 +2,9 @@
 
 namespace Core.Models.WineRealizations
 {
+    /// <summary>
+    /// TimeLine для виноделия
+    /// </summary>
     public class WineTimeLine : BaseTimeLine<WineUser, WineDay>
     {
         /// <summary>

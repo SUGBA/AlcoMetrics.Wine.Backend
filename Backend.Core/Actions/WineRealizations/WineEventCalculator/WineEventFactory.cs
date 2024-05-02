@@ -1,4 +1,5 @@
-﻿using Core.Actions.Abstractions.EventCalculator;
+﻿using Core.Actions.Abstractions.CalculatorUnitsMeasurement;
+using Core.Actions.Abstractions.EventCalculator;
 using Core.Actions.ShareRealizations.CalculatorUnitsMeasurement;
 using Core.Models.WineRealizations;
 
@@ -9,9 +10,9 @@ namespace Core.Actions.WineRealizations.WineEventCalculator
     /// </summary>
     public class WineEventFactory : IBaseEventFactory<WineEventTypes, WineIndicator>
     {
-        private UnitsCalculator unitsCalculator;
+        private IBaseUnitsCalculator<MeasurementUnits> unitsCalculator;
 
-        public WineEventFactory(UnitsCalculator unitsCalculator)
+        public WineEventFactory(IBaseUnitsCalculator<MeasurementUnits> unitsCalculator)
         {
             this.unitsCalculator = unitsCalculator;
         }

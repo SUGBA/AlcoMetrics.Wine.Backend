@@ -5,9 +5,9 @@ using Xunit.Abstractions;
 
 namespace Tests
 {
-    public class WineEventCalculator : BaseTest
+    public class WineEventCalculatorTests : BaseTest
     {
-        public WineEventCalculator(ITestOutputHelper output) : base(output) { }
+        public WineEventCalculatorTests(ITestOutputHelper output) : base(output) { }
 
         #region WineEventFactoryTests
         /// <summary>
@@ -27,7 +27,7 @@ namespace Tests
         }
 
         /// <summary>
-        /// Получение шаптализации с верными параметрами
+        /// Получение купажирования с верными параметрами
         /// </summary>
         [Fact]
         public void GettingCalculatorWithCorrectParameters2()
@@ -44,7 +44,7 @@ namespace Tests
         }
 
         /// <summary>
-        /// Получение шаптализации с не верными параметрами
+        /// Получение купажирования с не верными параметрами
         /// </summary>
         [Fact]
         public void GettingCalculatorWithInCorrectParameters1()
@@ -59,7 +59,7 @@ namespace Tests
         }
 
         /// <summary>
-        /// Получение шаптализации с не верными параметрами
+        /// Получение купажирования с не верными параметрами
         /// </summary>
         [Fact]
         public void GettingCalculatorWithInCorrectParameters2()
@@ -73,7 +73,7 @@ namespace Tests
         }
 
         /// <summary>
-        /// Получение шаптализации с не верными параметрами
+        /// Получение купажирования с не верными параметрами
         /// </summary>
         [Fact]
         public void GettingCalculatorWithInCorrectParameters3()
@@ -87,7 +87,7 @@ namespace Tests
         }
 
         /// <summary>
-        /// Получение шаптализации с не верными параметрами
+        /// Получение купажирования с не верными параметрами
         /// </summary>
         [Fact]
         public void GettingCalculatorWithInCorrectParameters4()
@@ -198,6 +198,71 @@ namespace Tests
 
             Assert.Equal(10.759, Math.Round(calcualtor.ResultIndicator.WortValue, 3));
             Assert.Equal(16, Math.Round(calcualtor.ResultIndicator.EthanolValue));
+        }
+        #endregion
+
+        #region WineEventWorkerTests
+
+        /// <summary>
+        /// Получение ингридиентов для крепления через фасад
+        /// </summary>
+        [Fact]
+        public void GetIngredientsForAlcoholization()
+        {
+            var unitsCalculatorFactory = new CalculatorFactory();
+            var unitsCalculator = new UnitsCalculator(unitsCalculatorFactory);
+            var eventFactory = new WineEventFactory(unitsCalculator);
+            var worker = new WineEventWorker(eventFactory);
+
+            var desiredIndicator = new WineIndicator() { EthanolValue = 16 };
+            var currentIndicator = new WineIndicator() { EthanolValue = 10, WortValue = 10 };
+
+            var result = worker.CalculateEventIngredients(WineEventTypes.Alcoholization, desiredIndicator, currentIndicator);
+
+            Assert.NotNull(result);
+            Assert.Equal(0.76, Math.Round(result!.First().Value, 2));
+        }
+
+        /// <summary>
+        /// Получение ингридиентов для шаптализации через фасад
+        /// </summary>
+        [Fact]
+        public void GetIngredientsForShaptaliszation()
+        {
+            var unitsCalculatorFactory = new CalculatorFactory();
+            var unitsCalculator = new UnitsCalculator(unitsCalculatorFactory);
+            var eventFactory = new WineEventFactory(unitsCalculator);
+            var worker = new WineEventWorker(eventFactory);
+
+            var desiredIndicator = new WineIndicator() { SugarValue = 50 };
+            var currentIndicator = new WineIndicator() { SugarValue = 30, WortValue = 10 };
+
+            var result = worker.CalculateEventIngredients(WineEventTypes.Shaptalization, desiredIndicator, currentIndicator);
+
+            Assert.NotNull(result);
+            Assert.Equal(405, Math.Round(result!.First().Value, 0));
+            Assert.Equal(5, Math.Round(result!.Last().Value, 0));
+        }
+
+        /// <summary>
+        /// Получение ингридиентов для купажирования через фасад
+        /// </summary>
+        [Fact]
+        public void GetIngredientsForBlending()
+        {
+            var unitsCalculatorFactory = new CalculatorFactory();
+            var unitsCalculator = new UnitsCalculator(unitsCalculatorFactory);
+            var eventFactory = new WineEventFactory(unitsCalculator);
+            var worker = new WineEventWorker(eventFactory);
+
+            var desiredIndicator = new WineIndicator() { SugarValue = 50, WortValue = 15, EthanolValue = 12 };
+            var currentIndicator = new WineIndicator() { SugarValue = 30, WortValue = 10, EthanolValue = 10 };
+            var substanceIndicator = new WineIndicator() { SugarValue = 65, WortValue = 10, EthanolValue = 14 };
+
+            var result = worker.CalculateEventIngredients(WineEventTypes.Blending, desiredIndicator, currentIndicator, new object[] { substanceIndicator, BasedSubstanceType.Sugar });
+
+            Assert.NotNull(result);
+            Assert.Equal(13.33, Math.Round(result!.First().Value, 2));
         }
         #endregion
     }

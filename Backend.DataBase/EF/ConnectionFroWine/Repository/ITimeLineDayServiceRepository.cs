@@ -37,5 +37,28 @@ namespace DataBase.EF.ConnectionFroWine.Repository
         /// <param name="timeLineId"> id проекта </param>
         /// <returns></returns>
         Task<IEnumerable<WineDay>> GetDaysWithIndicatorsAsync(int timeLineId);
+
+        /// <summary>
+        /// Получить показатели выбранного дня
+        /// </summary>
+        /// <param name="dayId"> Id дня </param>
+        /// <param name="userId"> Id пользователя </param>
+        /// <returns></returns>
+        Task<WineIndicator?> GetIndicatorAsync(int dayId, int userId);
+
+        /// <summary>
+        /// Получить типичное событие по enum
+        /// </summary>
+        /// <param name="typeEvent"> Тип события </param>
+        /// <returns></returns>
+        Task<WineTypicalEvent> GetTypicalEventAsync(WineEventTypes typeEvent);
+
+        /// <summary>
+        /// Добавить событие к определенному дню
+        /// </summary>
+        /// <param name="newEvent"> Добавляемое событие </param>
+        /// <param name="dayId"> id дня </param>
+        /// <returns></returns>
+        Task AddEventAsync(WineEvent newEvent, int dayId);
     }
 }

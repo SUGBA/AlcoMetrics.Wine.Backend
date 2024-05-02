@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Core.Models.Abstractions;
+﻿using Core.Models.Abstractions;
 
 namespace Core.Models.WineRealizations
 {
+    /// <summary>
+    /// Информация в виноделии
+    /// </summary>
     public class WineReferenceInformation : BaseReferenceInformation<Modules>
     {
 

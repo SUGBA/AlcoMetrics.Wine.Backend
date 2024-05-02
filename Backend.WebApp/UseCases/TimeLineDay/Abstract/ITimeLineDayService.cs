@@ -35,5 +35,33 @@ namespace WebApp.UseCases.TimeLineDay.Abstract
         /// <param name="model"> Модель с показаниями ареометра и id дня </param>
         /// <returns></returns>
         Task<string?> UpdateDayIndicatorsByAreometerAsync(UpdateIndicatorsByAllAreometer model);
+
+        /// <summary>
+        /// Добавить событие крепления вина
+        /// </summary>
+        /// <param name="request"> Модель с желаемыми показателями и крепостью спирта </param>
+        /// <returns></returns>
+        Task<CurrentDayEventsResponse?> AddAlcoholizationEventAsync(AddAlcoholizationEvent request);
+
+        /// <summary>
+        /// Добавить событие шаптализации
+        /// </summary>
+        /// <param name="request"> Модель с желаемыми показателями </param>
+        /// <returns></returns>
+        Task<CurrentDayEventsResponse?> AddShaptalizationEventAsync(AddShaptalizationEvent request);
+
+        /// <summary>
+        /// Добавить событие купажирования, по заданным параметрам
+        /// </summary>
+        /// <param name="request"> данные о купаже и желаемых показателях </param>
+        /// <returns></returns>
+        Task<CurrentDayEventsResponse?> AddBlendingEventByAllParamsAsync(AddBlendingEventByAllParams request);
+
+        /// <summary>
+        /// Добавить событие купажирования, по выбранному проекту
+        /// </summary>
+        /// <param name="request"> данные о купаже и желаемых показателях </param>
+        /// <returns></returns>
+        Task<CurrentDayEventsResponse?> AddBlendingEventByProjectAsync(AddBlendingEventByProject request);
     }
 }

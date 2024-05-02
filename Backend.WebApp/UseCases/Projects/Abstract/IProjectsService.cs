@@ -1,4 +1,4 @@
-﻿using WebApp.Models.Request.ProjectsPage;
+﻿using WebApp.Models.Request.Projects;
 using WebApp.Models.Response.ProjectsPage;
 
 namespace WebApp.UseCases.Projects.Abstract

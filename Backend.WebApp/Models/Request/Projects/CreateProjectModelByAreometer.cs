@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WebApp.Models.Request.ProjectsPage
+namespace WebApp.Models.Request.Projects
 {
     /// <summary>
     /// Модель создания проекта по показаниям ареометра
