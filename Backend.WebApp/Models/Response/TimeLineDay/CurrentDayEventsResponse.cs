@@ -43,6 +43,6 @@ namespace WebApp.Models.Response.TimeLineDay
         /// Показатели которые будут после принятия мероприятия
         /// </summary>
         [JsonPropertyName("Indicators")]
-        public ResultEventIndicatorsResponse Indicators { get; set; } = new();
+        public List<string> Indicators { get; set; } = new();
     }
 }

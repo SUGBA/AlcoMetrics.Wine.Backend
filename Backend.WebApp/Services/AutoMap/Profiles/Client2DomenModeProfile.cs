@@ -40,9 +40,11 @@ namespace WebApp.Services.AutoMap.Profiles
                 .ForMember(to => to.Type, from => from.MapFrom(src => src.EventType.ToStringFormat()))
                 .ForMember(to => to.Id, from => from.MapFrom(src => src.Id))
                 .ForMember(to => to.Ingridients, from => from.MapFrom(src => src.Ingridients.Select(x => $"{x.IngredientName}: {Math.Round(x.IngredientValue, 2)}")))
-                .ForPath(to => to.Indicators.EthanolValue, from => from.MapFrom(src => src.ResultIndicator!.EthanolValue))
-                .ForPath(to => to.Indicators.SuagrValue, from => from.MapFrom(src => src.ResultIndicator!.SugarValue))
-                .ForPath(to => to.Indicators.WortValue, from => from.MapFrom(src => src.ResultIndicator!.WortValue));
+                .ForPath(to => to.Indicators, from => from.MapFrom(src => new List<string>() {
+                    $"Содержание спирта: {src.ResultIndicator!.EthanolValue.ToString("F2")}",
+                    $"Содержание сахара: {src.ResultIndicator!.SugarValue.ToString("F2")}",
+                    $"Объем: {src.ResultIndicator!.WortValue.ToString("F2")}",
+                }));
 
             #endregion
         }
