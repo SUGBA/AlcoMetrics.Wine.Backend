@@ -2,7 +2,7 @@
 using Core.Actions.WineRealizations.WineCurrentIndicatorsCalculator;
 using Core.Models.WineRealizations;
 using Core.Models.WineRealizations.Enums;
-using DataBase.EF.ConnectionFroWine.Realizations;
+using DataBase.EF.ConnectionForWine.Realizations;
 using Xunit.Abstractions;
 
 namespace Tests

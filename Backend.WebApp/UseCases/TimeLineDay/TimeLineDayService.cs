@@ -4,10 +4,11 @@ using Core.Actions.Abstractions.DataBaseConnector;
 using Core.Actions.Abstractions.EventCalculator;
 using Core.Actions.Abstractions.TimeLineCreator;
 using Core.Actions.ShareRealizations.CalculatorUnitsMeasurement;
+using Core.Actions.WineRealizations.WineEventCalculator;
 using Core.Models.Abstractions;
 using Core.Models.WineRealizations;
 using Core.Models.WineRealizations.Enums;
-using DataBase.EF.ConnectionFroWine.Repository;
+using DataBase.EF.ConnectionForWine.Repository;
 using WebApp.Models.Request.TimeLineDay;
 using WebApp.Models.Response.TimeLineDay;
 using WebApp.UseCases.Base.Abstract;
@@ -88,11 +89,12 @@ namespace WebApp.UseCases.TimeLineDay
         public async Task<IEnumerable<CurrentDayEventsResponse>?> GetEventsAsync(int dayId)
         {
             var userId = GetUserId() ?? throw new Exception("Не удалось получит Id пользователя при формировании списка показателей конкретного дня");
-            var events = await _repository.GetEventsWithDayAndTimeLineAsync(dayId, userId);
+            var events = await _repository.GetEventsForTable(dayId, userId);
 
             if (events == null) return null;
 
-            return events.Select(x => Map<WineEvent, CurrentDayEventsResponse>(x));
+            var res =  events.Select(x => Map<WineEvent, CurrentDayEventsResponse>(x));
+            return res;
         }
 
         public async Task<string?> UpdateDayIndicatorsByAllParamsAsync(UpdateIndicatorsByAllParam model)
@@ -107,7 +109,7 @@ namespace WebApp.UseCases.TimeLineDay
             currentIndicators.EthanolValue = model.AlcoholPercentage;
             currentIndicators.WortValue = model.Wort;
 
-            var newDays = await RecalculateTimeLine(day.TimeLineId, model.DayId, currentIndicators);
+            var newDays = await RecalculateTimeLineAsync(day.TimeLineId, model.DayId, currentIndicators);
 
             await _repository.UpdateDaysAsync(newDays, day.TimeLineId);   //Обновляем дни TimeLine'a
 
@@ -131,7 +133,7 @@ namespace WebApp.UseCases.TimeLineDay
             currentIndicators.SugarValue = updatedIndicator.SugarValue;
             currentIndicators.EthanolValue = updatedIndicator.EthanolValue;
 
-            var newDays = await RecalculateTimeLine(day.TimeLineId, model.DayId, currentIndicators);
+            var newDays = await RecalculateTimeLineAsync(day.TimeLineId, model.DayId, currentIndicators);
 
             await _repository.UpdateDaysAsync(newDays, day.TimeLineId);   //Обновляем дни TimeLine'a
 
@@ -146,7 +148,7 @@ namespace WebApp.UseCases.TimeLineDay
         /// <param name="updatedIndicator"> измененные показатели </param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private async Task<List<WineDay>> RecalculateTimeLine(int timeLineId, int dayId, WineIndicator updatedIndicator)
+        private async Task<List<WineDay>> RecalculateTimeLineAsync(int timeLineId, int dayId, WineIndicator updatedIndicator)
         {
             var userId = GetUserId() ?? throw new Exception("Пользователь с заданным id не существует, при попытке получения списка дней для перерасчета");
             var days = await _repository.GetDaysWithIndicatorsAsync(timeLineId);
@@ -163,9 +165,10 @@ namespace WebApp.UseCases.TimeLineDay
             updatedIndicator.EthanolValue = _calculator.Calculate(MeasurementUnits.Percentage, MeasurementUnits.GramPerLiter, updatedIndicator.EthanolValue);     //Показания спирта в Г/Л
 
             var firstPart = days.Where(x => x.CurrentDate < currentDay.CurrentDate);                                                //Дни до даты актуализации
-            var recalculatedDays = _timeLineCreator.GetTimeLine(updatedIndicator, dayNumber, maxDayCount, currentDay.CurrentDate);  //Дни идущие после актуализирующего дня
+            var secondPart = _timeLineCreator.GetTimeLine(updatedIndicator, dayNumber, maxDayCount, currentDay.CurrentDate).Days;  //Дни идущие после актуализирующего дня
+            secondPart.First().Id = currentDay.Id;
 
-            var result = firstPart.Concat(recalculatedDays.Days);
+            var result = firstPart.Concat(secondPart);
 
             return result.ToList();
         }
@@ -184,32 +187,168 @@ namespace WebApp.UseCases.TimeLineDay
             desiredIndicator.EthanolValue = request.DesiredAlcoholValue;
             desiredIndicator.Id = 0;
 
+            var ingridients = _eventWorker.CalculateEventIngredients(WineEventTypes.Alcoholization, desiredIndicator, currentIndicator, new object[] { request.AlcoholValue });
+            var dbIngridients = ingridients?.Select(x => new WineIngredient() { IngredientName = x.Key, IngredientValue = x.Value }).ToList() ?? new List<WineIngredient>();
+
             var typicalEvent = await _repository.GetTypicalEventAsync(WineEventTypes.Alcoholization);
             var newEvent = new WineEvent()
             {
                 DesiredIndicator = desiredIndicator,
                 EventType = EventCustomTypes.Custom,
                 IsCompleted = false,
-                TypicalEvent = typicalEvent
+                TypicalEvent = typicalEvent,
+                Ingridients = dbIngridients,
+                ResultIndicator = _eventWorker.ResultIndicator ?? new()
             };
 
             await _repository.AddEventAsync(newEvent, request.DayId);
             return Map<WineEvent, CurrentDayEventsResponse>(newEvent);
         }
 
-        public Task<CurrentDayEventsResponse?> AddShaptalizationEventAsync(AddShaptalizationEvent request)
+        public async Task<CurrentDayEventsResponse?> AddShaptalizationEventAsync(AddShaptalizationEvent request)
         {
-            throw new NotImplementedException();
+            var userId = GetUserId() ?? throw new Exception("Пользователь с заданным Id не существует, при добавлении события шаптализации");
+
+            var currentDay = await _repository.GetDayWithIndicatorsAndTimeLineAsync(request.DayId, userId);
+            if (currentDay == null) return null;
+            var currentIndicator = currentDay.Indicator;
+
+            var desiredDay = await _repository.GetDayWithIndicatorsAndTimeLineAsync(request.DayId, userId);
+            if (desiredDay == null) return null;
+            var desiredIndicator = desiredDay.Indicator;
+            desiredIndicator.EthanolValue = request.DesiredSugarValue;
+            desiredIndicator.Id = 0;
+
+            var ingridients = _eventWorker.CalculateEventIngredients(WineEventTypes.Shaptalization, desiredIndicator, currentIndicator);
+            var dbIngridients = ingridients?.Select(x => new WineIngredient() { IngredientName = x.Key, IngredientValue = x.Value }).ToList() ?? new List<WineIngredient>();
+
+            var typicalEvent = await _repository.GetTypicalEventAsync(WineEventTypes.Shaptalization);
+            var newEvent = new WineEvent()
+            {
+                DesiredIndicator = desiredIndicator,
+                EventType = EventCustomTypes.Custom,
+                IsCompleted = false,
+                TypicalEvent = typicalEvent,
+                Ingridients = dbIngridients,
+                ResultIndicator = _eventWorker.ResultIndicator ?? new()
+            };
+
+            await _repository.AddEventAsync(newEvent, request.DayId);
+            return Map<WineEvent, CurrentDayEventsResponse>(newEvent);
         }
 
-        public Task<CurrentDayEventsResponse?> AddBlendingEventByAllParamsAsync(AddBlendingEventByAllParams request)
+        public async Task<CurrentDayEventsResponse?> AddBlendingEventByAllParamsAsync(AddBlendingEventByAllParams request)
         {
-            throw new NotImplementedException();
+            var userId = GetUserId() ?? throw new Exception("Пользователь с заданным Id не существует, при купажировании на основе всех параметров");
+
+            var substanceIndicator = new WineIndicator() { EthanolValue = request.AlcoholValue, SugarValue = request.SugarValue };
+
+            var currentDay = await _repository.GetDayWithIndicatorsAndTimeLineAsync(request.DayId, userId);
+            if (currentDay == null) return null;
+            var currentIndicator = currentDay.Indicator;
+
+            var desiredDay = await _repository.GetDayWithIndicatorsAndTimeLineAsync(request.DayId, userId);
+            if (desiredDay == null) return null;
+            var desiredIndicator = desiredDay.Indicator;
+            desiredIndicator.SugarValue = request.DesiredSugarValue;
+            desiredIndicator.EthanolValue = request.DesiredAlcoholValue;
+            desiredIndicator.Id = 0;
+
+            var ingridients = _eventWorker.CalculateEventIngredients(WineEventTypes.Blending, desiredIndicator, currentIndicator, new object[] { substanceIndicator, BasedSubstanceType.Sugar });
+            var dbIngridients = ingridients?.Select(x => new WineIngredient() { IngredientName = x.Key, IngredientValue = x.Value }).ToList() ?? new List<WineIngredient>();
+
+            var typicalEvent = await _repository.GetTypicalEventAsync(WineEventTypes.Blending);
+            var newEvent = new WineEvent()
+            {
+                DesiredIndicator = desiredIndicator,
+                EventType = EventCustomTypes.Custom,
+                IsCompleted = false,
+                TypicalEvent = typicalEvent,
+                Ingridients = dbIngridients,
+                ResultIndicator = _eventWorker.ResultIndicator ?? new()
+            };
+
+            await _repository.AddEventAsync(newEvent, request.DayId);
+            return Map<WineEvent, CurrentDayEventsResponse>(newEvent);
         }
 
-        public Task<CurrentDayEventsResponse?> AddBlendingEventByProjectAsync(AddBlendingEventByProject request)
+        public async Task<CurrentDayEventsResponse?> AddBlendingEventByProjectAsync(AddBlendingEventByProject request)
         {
-            throw new NotImplementedException();
+            var userId = GetUserId() ?? throw new Exception("Пользователь с заданным Id не существует, при добавления события купажирования по проекту");
+
+            var currentDay = await _repository.GetDayWithIndicatorsAndTimeLineAsync(request.DayId, userId);
+            if (currentDay == null) return null;
+            var currentIndicator = currentDay.Indicator;
+
+            //В качестве индикатор купажа выбираем день с минимальной дельтой между датами купажа и нашего сусла. То есть выбирается день максимально близкий по дате к дате изменяемого дня.
+            var substanceTimeLine = await _repository.GetDaysWithIndicatorsAsync(request.SelectedProjectId);
+            if (substanceTimeLine == null) return null;
+            var substanceDay = substanceTimeLine.OrderBy(x => Math.Abs((x.CurrentDate - currentDay.CurrentDate).TotalMinutes)).FirstOrDefault();
+            if (substanceDay == null) return null;
+            var substanceIndicator = substanceDay.Indicator;
+
+            var desiredDay = await _repository.GetDayWithIndicatorsAndTimeLineAsync(request.DayId, userId);
+            if (desiredDay == null) return null;
+            var desiredIndicator = desiredDay.Indicator;
+            desiredIndicator.SugarValue = request.DesiredSugarValue;
+            desiredIndicator.EthanolValue = request.DesiredAlcoholValue;
+            desiredIndicator.Id = 0;
+
+            var ingridients = _eventWorker.CalculateEventIngredients(WineEventTypes.Blending, desiredIndicator, currentIndicator, new object[] { substanceIndicator, BasedSubstanceType.Sugar });
+            var dbIngridients = ingridients?.Select(x => new WineIngredient() { IngredientName = x.Key, IngredientValue = x.Value }).ToList() ?? new List<WineIngredient>();
+
+            var typicalEvent = await _repository.GetTypicalEventAsync(WineEventTypes.Blending);
+            var newEvent = new WineEvent()
+            {
+                DesiredIndicator = desiredIndicator,
+                EventType = EventCustomTypes.Custom,
+                IsCompleted = false,
+                TypicalEvent = typicalEvent,
+                Ingridients = dbIngridients,
+                ResultIndicator = _eventWorker.ResultIndicator ?? new()
+            };
+
+            await _repository.AddEventAsync(newEvent, request.DayId);
+            return Map<WineEvent, CurrentDayEventsResponse>(newEvent);
+        }
+
+        public async Task<IEnumerable<GetProjectsResponse>> GetProjectsAsync(int currentProjectId)
+        {
+            var userId = GetUserId() ?? throw new Exception("Пользователь с заданным Id не существует, при получении списка проектов для купажирования");
+            var projects = await _repository.GetProjectsAsync(userId);
+            var resultProjects = projects?.Where(x => x.Id != currentProjectId) ?? Enumerable.Empty<WineTimeLine>();
+            var result = resultProjects.Select(x => new GetProjectsResponse() { ProjectId = x.Id, ProjectName = x.TimeLineName });
+            return result;
+        }
+
+        public async Task<bool> AcceptEventAsync(int eventId)
+        {
+            var userId = GetUserId() ?? throw new Exception("Отсутствует Id пользователя при попытке подтверждения мероприятия");
+            var evn = await _repository.GetDayForEventAcceptAsync(eventId, userId);
+            if (evn == null || evn.Day == null)
+                return false;
+
+            var updatedDay = evn.Day;
+            var newIndicator = updatedDay.Events.First(x => x.Id == eventId).ResultIndicator;
+            if (newIndicator == null)
+                return false;
+
+            updatedDay.Indicator = newIndicator;
+            updatedDay.Events.Remove(evn);
+            await _repository.DeleteEventAsync(eventId, userId);
+            await _repository.UpdateDayAsync(updatedDay);
+
+            var newDays = await RecalculateTimeLineAsync(updatedDay.TimeLineId, updatedDay.Id, newIndicator);
+
+            await _repository.UpdateDaysAsync(newDays, updatedDay.TimeLineId);   //Обновляем дни TimeLine'a
+
+            return true;
+        }
+
+        public async Task<bool> DeleteEventAsync(int eventId)
+        {
+            var userId = GetUserId() ?? throw new Exception("Отсутствует Id пользователя при попытке удалении мероприятия");
+            return await _repository.DeleteEventAsync(eventId, userId);
         }
     }
 }

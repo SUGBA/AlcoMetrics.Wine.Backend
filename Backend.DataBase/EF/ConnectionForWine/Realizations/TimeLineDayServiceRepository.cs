@@ -1,9 +1,9 @@
 ﻿using Core.Models.WineRealizations;
-using DataBase.EF.ConnectionFroWine.DbContexts;
-using DataBase.EF.ConnectionFroWine.Repository;
+using DataBase.EF.ConnectionForWine.DbContexts;
+using DataBase.EF.ConnectionForWine.Repository;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataBase.EF.ConnectionFroWine.Realizations
+namespace DataBase.EF.ConnectionForWine.Realizations
 {
     /// <summary>
     /// Имплементация для сервиса-репозитория модуля TimeLineDay
@@ -17,11 +17,13 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
 
         public TimeLineDayServiceRepository() => _context = new WineDbContext();
 
-        public async Task<IEnumerable<WineEvent>?> GetEventsWithDayAndTimeLineAsync(int dayId, int userId)
+        public async Task<IEnumerable<WineEvent>?> GetEventsForTable(int dayId, int userId)
         {
             return await _context.WineEvents
                 .AsNoTracking()
                 .Include(x => x.TypicalEvent)
+                .Include(x => x.ResultIndicator)
+                .Include(x=>x.Ingridients)
                 .Include(x => x.Day)
                 .ThenInclude(x => x.TimeLine)
                 .Where(x => x.DayId == dayId && x.Day.TimeLine.UserId == userId)
@@ -42,21 +44,12 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
         {
             var updatedTimeLine = await _context.WineTimeLines
                 .Include(x => x.Days)
-                .ThenInclude(x => x.Indicator)
                 .FirstOrDefaultAsync(x => x.Id == timeLineId);
             if (updatedTimeLine == null) return;
 
             updatedTimeLine.Days = days;
 
-            foreach (var day in updatedTimeLine.Days)
-            {
-                foreach (var evnt in day.Events)
-                {
-                    _context.Entry(evnt.TypicalEvent).State = EntityState.Unchanged;     //Помечаем Unchanged, чтобы EF не создавал новые записи TypicalEvent
-                }
-            }
-
-            _context.WineTimeLines.Update(updatedTimeLine);
+            _context.WineTimeLines.UpdateRange(updatedTimeLine);
             await _context.SaveChangesAsync();
         }
 
@@ -83,7 +76,9 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
 
         public async Task<WineTypicalEvent> GetTypicalEventAsync(WineEventTypes typeEvent)
         {
-            var typicalEvent = await _context.WineTypicalEvents.AsNoTracking().FirstOrDefaultAsync(x => x.EventType == WineEventTypes.Alcoholization);
+            var typicalEvent = await _context.WineTypicalEvents
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.EventType == typeEvent);
             if (typicalEvent == null) throw new Exception("Отсутствует событие при заполнении системных событий");
             return typicalEvent;
         }
@@ -94,6 +89,46 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
             if (day == null) return;
 
             day.Events.Add(newEvent);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<WineTimeLine>> GetProjectsAsync(int userId)
+        {
+            return await _context.WineTimeLines
+                .AsNoTracking()
+                .Where(x => x.UserId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<WineEvent?> GetDayForEventAcceptAsync(int eventId, int userId)
+        {
+            return await _context.WineEvents
+                .AsNoTracking()
+                .Include(x => x.ResultIndicator)
+                .Include(x=>x.Day)
+                .ThenInclude(x => x.TimeLine)
+                .FirstOrDefaultAsync(x => x.Id == eventId && x.Day.TimeLine.UserId == userId);
+        }
+
+        public async Task<bool> DeleteEventAsync(int eventId, int userId)
+        {
+            var deletedItem = await _context.WineEvents
+                .AsNoTracking()
+                .Include(x => x.Day)
+                .ThenInclude(x => x.TimeLine)
+                .FirstOrDefaultAsync(x => x.Id == eventId && x.Day.TimeLine.UserId == userId);
+            if (deletedItem == null)
+                return false;
+
+            _context.WineEvents.Remove(deletedItem);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task UpdateDayAsync(WineDay day)
+        {
+            _context.ChangeTracker.Clear();
+            _context.WineDays.Update(day);
             await _context.SaveChangesAsync();
         }
     }

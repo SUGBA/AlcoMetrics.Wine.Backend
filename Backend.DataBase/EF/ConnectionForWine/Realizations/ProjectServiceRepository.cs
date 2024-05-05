@@ -1,9 +1,9 @@
 ﻿using Core.Models.WineRealizations;
-using DataBase.EF.ConnectionFroWine.DbContexts;
-using DataBase.EF.ConnectionFroWine.Repository;
+using DataBase.EF.ConnectionForWine.DbContexts;
+using DataBase.EF.ConnectionForWine.Repository;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataBase.EF.ConnectionFroWine.Realizations
+namespace DataBase.EF.ConnectionForWine.Realizations
 {
     /// <summary>
     /// Реализация репозитория для модуля ProjectPage
@@ -19,15 +19,6 @@ namespace DataBase.EF.ConnectionFroWine.Realizations
 
         public async Task AddTimeLineAsync(WineTimeLine timeLine)
         {
-
-            foreach (var day in timeLine.Days)
-            {
-                foreach (var evnt in day.Events)
-                {
-                    _context.Entry(evnt.TypicalEvent).State = EntityState.Unchanged;     //Почемаем Unchanged, чтобы EF не создавал новые записи TypicalEvent
-                }
-            }
-
             await _context.WineTimeLines.AddAsync(timeLine);
             await _context.SaveChangesAsync();
         }

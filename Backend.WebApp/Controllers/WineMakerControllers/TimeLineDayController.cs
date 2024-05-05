@@ -74,5 +74,71 @@ namespace WebApp.Controllers.WineMakerControllers
         {
             return await _timeLineDayService.AddAlcoholizationEventAsync(model);
         }
+
+        /// <summary>
+        /// Точка для добавления события шаптализации
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("AddShaptalizationEvent")]
+        [Authorize(Roles = "WineMaker")]
+        public async Task<CurrentDayEventsResponse?> AddShaptalizationEvent([FromBody] AddShaptalizationEvent model)
+        {
+            return await _timeLineDayService.AddShaptalizationEventAsync(model);
+        }
+
+        /// <summary>
+        /// Точка для добавления события купажирования по всем параметрам
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("AddBlendingEventByAllParams")]
+        [Authorize(Roles = "WineMaker")]
+        public async Task<CurrentDayEventsResponse?> AddBlendingEventByAllParams([FromBody] AddBlendingEventByAllParams model)
+        {
+            return await _timeLineDayService.AddBlendingEventByAllParamsAsync(model);
+        }
+
+        /// <summary>
+        /// Точка для добавления события купажирования по проекту
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("AddBlendingEventByProject")]
+        [Authorize(Roles = "WineMaker")]
+        public async Task<CurrentDayEventsResponse?> AddBlendingEventByProject([FromBody] AddBlendingEventByProject model)
+        {
+            return await _timeLineDayService.AddBlendingEventByProjectAsync(model);
+        }
+
+        /// <summary>
+        /// Точка для добавления события шаптализации
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetProjects/{currentProjectId:int}")]
+        [Authorize(Roles = "WineMaker")]
+        public async Task<IEnumerable<GetProjectsResponse>> GetProjects(int currentProjectId)
+        {
+            return await _timeLineDayService.GetProjectsAsync(currentProjectId);
+        }
+
+        /// <summary>
+        /// Точка для удаления события
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("RemoveEvent/{eventId:int}")]
+        [Authorize(Roles = "WineMaker")]
+        public async Task<bool> RemoveEvent(int eventId)
+        {
+            return await _timeLineDayService.DeleteEventAsync(eventId);
+        }
+
+        /// <summary>
+        /// Точка для удаления события
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("AcceptEvent/{eventId:int}")]
+        [Authorize(Roles = "WineMaker")]
+        public async Task<bool> AcceptEvent(int eventId)
+        {
+            return await _timeLineDayService.AcceptEventAsync(eventId);
+        }
     }
 }

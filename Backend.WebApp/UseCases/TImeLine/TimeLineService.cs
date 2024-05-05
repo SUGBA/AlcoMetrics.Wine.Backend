@@ -1,5 +1,5 @@
 ﻿using Core.Models.WineRealizations;
-using DataBase.EF.ConnectionFroWine.Repository;
+using DataBase.EF.ConnectionForWine.Repository;
 using WebApp.Models.Response.TimeLine;
 using WebApp.UseCases.Base.Abstract;
 using WebApp.UseCases.TImeLine.Abstract;

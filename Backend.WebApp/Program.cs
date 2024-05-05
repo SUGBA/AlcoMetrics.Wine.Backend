@@ -1,6 +1,6 @@
-using DataBase.EF.ConnectionFroWine.DbContexts;
-using MathNet.Numerics;
+using DataBase.EF.ConnectionForWine.DbContexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using WebApp.Extensions;
 using WebApp.Services.AutoMap.Profiles;
 using WebApp.UseCases.Account;
@@ -14,7 +14,7 @@ namespace Backend.WebApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<WineDbContext>(options => { }, ServiceLifetime.Scoped);
+            builder.Services.AddDbContext<WineDbContext>(ServiceLifetime.Scoped);
 
             builder.Services.AddCors(options =>
             {

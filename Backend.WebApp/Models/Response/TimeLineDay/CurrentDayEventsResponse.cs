@@ -10,6 +10,12 @@ namespace WebApp.Models.Response.TimeLineDay
     public class CurrentDayEventsResponse
     {
         /// <summary>
+        /// Id мероприятия
+        /// </summary>
+        [JsonPropertyName("Id")]
+        public int Id { get; set; }
+
+        /// <summary>
         /// Наименование мероприятия
         /// </summary>
         [JsonPropertyName("EventName")]
@@ -26,5 +32,17 @@ namespace WebApp.Models.Response.TimeLineDay
         /// </summary>
         [JsonPropertyName("Type")]
         public string Type { get; set; } = EventCustomTypes.System.ToStringFormat();
+
+        /// <summary>
+        /// Список ингридиентов для выполнения данного события
+        /// </summary>
+        [JsonPropertyName("Ingridients")]
+        public List<string> Ingridients { get; set; } = new();
+
+        /// <summary>
+        /// Показатели которые будут после принятия мероприятия
+        /// </summary>
+        [JsonPropertyName("Indicators")]
+        public ResultEventIndicatorsResponse Indicators { get; set; } = new();
     }
 }

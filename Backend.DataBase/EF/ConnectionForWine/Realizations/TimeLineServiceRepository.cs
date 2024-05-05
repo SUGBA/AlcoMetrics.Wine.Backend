@@ -1,9 +1,9 @@
 ﻿using Core.Models.WineRealizations;
-using DataBase.EF.ConnectionFroWine.DbContexts;
-using DataBase.EF.ConnectionFroWine.Repository;
+using DataBase.EF.ConnectionForWine.DbContexts;
+using DataBase.EF.ConnectionForWine.Repository;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataBase.EF.ConnectionFroWine.Realizations
+namespace DataBase.EF.ConnectionForWine.Realizations
 {
     /// <summary>
     /// Имплементация репозитория для получения данных для модуля TimeLine

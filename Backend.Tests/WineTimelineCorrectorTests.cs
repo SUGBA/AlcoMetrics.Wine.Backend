@@ -3,7 +3,7 @@ using Core.Actions.WineRealizations.WineTimeLineCalculator;
 using Core.Actions.WineRealizations.WineTimelineCorrector;
 using Core.Actions.WineRealizations.WineTimeLineCreator;
 using Core.Models.WineRealizations;
-using DataBase.EF.ConnectionFroWine.Realizations;
+using DataBase.EF.ConnectionForWine.Realizations;
 using Xunit.Abstractions;
 
 namespace Tests

@@ -1,6 +1,6 @@
 ﻿using Core.Models.WineRealizations;
 
-namespace DataBase.EF.ConnectionFroWine.Repository
+namespace DataBase.EF.ConnectionForWine.Repository
 {
     /// <summary>
     /// Репозиторий для модуля TimeLineDayService
@@ -21,7 +21,7 @@ namespace DataBase.EF.ConnectionFroWine.Repository
         /// <param name="dayId"> Id выбранного дня </param>
         /// <param name="userId"> Id текущего пользователя </param>
         /// <returns></returns>
-        Task<IEnumerable<WineEvent>?> GetEventsWithDayAndTimeLineAsync(int dayId, int userId);
+        Task<IEnumerable<WineEvent>?> GetEventsForTable(int dayId, int userId);
 
         /// <summary>
         /// Обновить список дней
@@ -60,5 +60,35 @@ namespace DataBase.EF.ConnectionFroWine.Repository
         /// <param name="dayId"> id дня </param>
         /// <returns></returns>
         Task AddEventAsync(WineEvent newEvent, int dayId);
+
+        /// <summary>
+        /// Получить список проектов пользователя
+        /// </summary>
+        /// <param name="userId"> id пользователя </param>
+        /// <returns></returns>
+        Task<IEnumerable<WineTimeLine>> GetProjectsAsync(int userId);
+
+        /// <summary>
+        /// Получить событие
+        /// </summary>
+        /// <param name="eventId"> Id события </param>
+        /// <param name="userId"> Id пользователя </param>
+        /// <returns></returns>
+        Task<WineEvent?> GetDayForEventAcceptAsync(int eventId, int userId);
+
+        /// <summary>
+        /// Удалить мероприятие
+        /// </summary>
+        /// <param name="eventId"> Id события </param>
+        /// <param name="userId"> Id пользователя </param>
+        /// <returns></returns>
+        Task<bool> DeleteEventAsync(int eventId, int userId);
+
+        /// <summary>
+        /// Обновить день
+        /// </summary>
+        /// <param name="day"> Обновленный день </param>
+        /// <returns></returns>
+        Task UpdateDayAsync(WineDay day);
     }
 }

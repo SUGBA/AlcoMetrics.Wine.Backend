@@ -7,7 +7,7 @@
     /// <typeparam name="BE"> День, для выбранного направления </typeparam>
     /// <typeparam name="I"> Индикатор </typeparam>
     /// <typeparam name="BI"> Ингридиент </typeparam>
-    public abstract class BaseEvent<S, BE, I> : BaseEntity
+    public abstract class BaseEvent<S, BE, I, BI> : BaseEntity
     {
         /// <summary>
         /// Тип события (Системное/Пользовательское)
@@ -48,6 +48,21 @@
         /// Желаемые показатели
         /// </summary>
         public I DesiredIndicator { get; set; }
+
+        /// <summary>
+        /// Ингридиенты
+        /// </summary>
+        public List<BI> Ingridients { get; set; }
+
+        /// <summary>
+        /// Результирующий индикатор, который будет присвоен после подтверждения мероприятия
+        /// </summary>
+        public int? ResultIndicatorId { get; set; }
+
+        /// <summary>
+        /// Результирующий индикатор, который будет присвоен после подтверждения мероприятия
+        /// </summary>
+        public I? ResultIndicator { get; set; }
     }
 
     /// <summary>

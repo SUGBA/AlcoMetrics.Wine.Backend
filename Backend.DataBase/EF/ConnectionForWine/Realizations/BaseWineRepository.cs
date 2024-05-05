@@ -1,9 +1,9 @@
 ﻿using Core.Actions.Abstractions.DataBaseConnector;
 using Core.Models.Abstractions;
-using DataBase.EF.ConnectionFroWine.DbContexts;
+using DataBase.EF.ConnectionForWine.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataBase.EF.ConnectionFroWine.Realizations
+namespace DataBase.EF.ConnectionForWine.Realizations
 {
     /// <summary>
     /// Контект для виноделия

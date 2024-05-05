@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DataBase.EF.ConnectionFroWine.Migrations
+namespace DataBase.EF.ConnectionForWine.Migrations
 {
     public partial class CreateMigration : Migration
     {
@@ -119,6 +119,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    StartAreometerValue = table.Column<int>(type: "integer", nullable: true),
                     TimeLineName = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -161,7 +162,7 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WineEvent",
+                name: "WineEvents",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -170,29 +171,54 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
                     TypicalEventId = table.Column<int>(type: "integer", nullable: false),
                     IsCompleted = table.Column<bool>(type: "boolean", nullable: false),
                     DayId = table.Column<int>(type: "integer", nullable: false),
-                    DesiredIndicatorId = table.Column<int>(type: "integer", nullable: false)
+                    DesiredIndicatorId = table.Column<int>(type: "integer", nullable: false),
+                    ResultIndicatorId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WineEvent", x => x.Id);
+                    table.PrimaryKey("PK_WineEvents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WineEvent_WineDays_DayId",
+                        name: "FK_WineEvents_WineDays_DayId",
                         column: x => x.DayId,
                         principalTable: "WineDays",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_WineEvent_WineIndicators_DesiredIndicatorId",
+                        name: "FK_WineEvents_WineIndicators_DesiredIndicatorId",
                         column: x => x.DesiredIndicatorId,
                         principalTable: "WineIndicators",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_WineEvent_WineTypicalEvents_TypicalEventId",
+                        name: "FK_WineEvents_WineIndicators_ResultIndicatorId",
+                        column: x => x.ResultIndicatorId,
+                        principalTable: "WineIndicators",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_WineEvents_WineTypicalEvents_TypicalEventId",
                         column: x => x.TypicalEventId,
                         principalTable: "WineTypicalEvents",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WineIngredient",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    WineEventId = table.Column<int>(type: "integer", nullable: true),
+                    IngredientName = table.Column<string>(type: "text", nullable: false),
+                    IngredientValue = table.Column<double>(type: "double precision", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WineIngredient", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WineIngredient_WineEvents_WineEventId",
+                        column: x => x.WineEventId,
+                        principalTable: "WineEvents",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -206,19 +232,29 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
                 column: "TimeLineId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WineEvent_DayId",
-                table: "WineEvent",
+                name: "IX_WineEvents_DayId",
+                table: "WineEvents",
                 column: "DayId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WineEvent_DesiredIndicatorId",
-                table: "WineEvent",
+                name: "IX_WineEvents_DesiredIndicatorId",
+                table: "WineEvents",
                 column: "DesiredIndicatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WineEvent_TypicalEventId",
-                table: "WineEvent",
+                name: "IX_WineEvents_ResultIndicatorId",
+                table: "WineEvents",
+                column: "ResultIndicatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WineEvents_TypicalEventId",
+                table: "WineEvents",
                 column: "TypicalEventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WineIngredient_WineEventId",
+                table: "WineIngredient",
+                column: "WineEventId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WineTimeLines_UserId",
@@ -238,10 +274,13 @@ namespace DataBase.EF.ConnectionFroWine.Migrations
                 name: "GrapeVarieties");
 
             migrationBuilder.DropTable(
-                name: "WineEvent");
+                name: "WineIngredient");
 
             migrationBuilder.DropTable(
                 name: "WineReferenceInformations");
+
+            migrationBuilder.DropTable(
+                name: "WineEvents");
 
             migrationBuilder.DropTable(
                 name: "WineDays");

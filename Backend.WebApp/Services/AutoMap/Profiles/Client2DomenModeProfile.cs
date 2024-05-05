@@ -2,7 +2,6 @@
 using AutoMapper;
 using Core.Models.WineRealizations;
 using WebApp.Extensions;
-using WebApp.Models.Request.TimeLineDay;
 using WebApp.Models.Response.TimeLine;
 using WebApp.Models.Response.TimeLineDay;
 
@@ -38,7 +37,12 @@ namespace WebApp.Services.AutoMap.Profiles
             CreateMap<WineEvent, CurrentDayEventsResponse>()
                 .ForMember(to => to.EventName, from => from.MapFrom(src => src.TypicalEvent.Name))
                 .ForMember(to => to.IsReady, from => from.MapFrom(src => src.IsCompleted))
-                .ForMember(to => to.Type, from => from.MapFrom(src => src.EventType.ToStringFormat()));
+                .ForMember(to => to.Type, from => from.MapFrom(src => src.EventType.ToStringFormat()))
+                .ForMember(to => to.Id, from => from.MapFrom(src => src.Id))
+                .ForMember(to => to.Ingridients, from => from.MapFrom(src => src.Ingridients.Select(x => $"{x.IngredientName}: {Math.Round(x.IngredientValue, 2)}")))
+                .ForPath(to => to.Indicators.EthanolValue, from => from.MapFrom(src => src.ResultIndicator!.EthanolValue))
+                .ForPath(to => to.Indicators.SuagrValue, from => from.MapFrom(src => src.ResultIndicator!.SugarValue))
+                .ForPath(to => to.Indicators.WortValue, from => from.MapFrom(src => src.ResultIndicator!.WortValue));
 
             #endregion
         }

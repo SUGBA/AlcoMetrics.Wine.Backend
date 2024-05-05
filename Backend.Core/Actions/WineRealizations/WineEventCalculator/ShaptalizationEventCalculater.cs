@@ -55,7 +55,7 @@ namespace Core.Actions.WineRealizations.WineEventCalculator
             return new WineIndicator()
             {
                 EthanolValue = indicator.EthanolValue,
-                Id = indicator.Id,
+                Id = 0,
                 NitrogenValue = indicator.NitrogenValue,
                 SugarValue = indicator.SugarValue,
                 WortValue = indicator.WortValue,

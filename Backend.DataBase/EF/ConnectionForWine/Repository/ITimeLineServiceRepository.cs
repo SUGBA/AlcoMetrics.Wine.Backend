@@ -1,6 +1,6 @@
 ﻿using Core.Models.WineRealizations;
 
-namespace DataBase.EF.ConnectionFroWine.Repository
+namespace DataBase.EF.ConnectionForWine.Repository
 {
     /// <summary>
     /// Репозиторий для модуля со списком дней для проекта

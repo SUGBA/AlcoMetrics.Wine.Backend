@@ -6,7 +6,7 @@ using Core.Actions.Abstractions.TImeLineIndicatorConverter;
 using Core.Actions.ShareRealizations.CalculatorUnitsMeasurement;
 using Core.Models.WineRealizations;
 using Core.Models.WineRealizations.Enums;
-using DataBase.EF.ConnectionFroWine.Repository;
+using DataBase.EF.ConnectionForWine.Repository;
 using WebApp.Models.Request.Projects;
 using WebApp.Models.Response.ProjectsPage;
 using WebApp.UseCases.Base.Abstract;

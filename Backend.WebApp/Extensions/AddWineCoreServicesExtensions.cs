@@ -15,7 +15,7 @@ using Core.Actions.WineRealizations.WineTimelineCorrector;
 using Core.Actions.WineRealizations.WineTimeLineCreator;
 using Core.Models.WineRealizations;
 using Core.Models.WineRealizations.Enums;
-using DataBase.EF.ConnectionFroWine.Realizations;
+using DataBase.EF.ConnectionForWine.Realizations;
 
 namespace WebApp.Extensions
 {

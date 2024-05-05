@@ -1,6 +1,6 @@
 ﻿using Core.Actions.Abstractions.DataBaseConnector;
-using DataBase.EF.ConnectionFroWine.Realizations;
-using DataBase.EF.ConnectionFroWine.Repository;
+using DataBase.EF.ConnectionForWine.Realizations;
+using DataBase.EF.ConnectionForWine.Repository;
 
 namespace WebApp.Extensions
 {

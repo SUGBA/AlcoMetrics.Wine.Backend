@@ -63,5 +63,26 @@ namespace WebApp.UseCases.TimeLineDay.Abstract
         /// <param name="request"> данные о купаже и желаемых показателях </param>
         /// <returns></returns>
         Task<CurrentDayEventsResponse?> AddBlendingEventByProjectAsync(AddBlendingEventByProject request);
+
+        /// <summary>
+        /// Получить список проектов пользователя
+        /// </summary>
+        /// <param name="currentProjectId"> id текущего проекта </param>
+        /// <returns></returns>
+        Task<IEnumerable<GetProjectsResponse>> GetProjectsAsync(int currentProjectId);
+
+        /// <summary>
+        /// Подтвердить мероприятие
+        /// </summary>
+        /// <param name="eventId"> Id мероприятия </param>
+        /// <returns></returns>
+        Task<bool> AcceptEventAsync(int eventId);
+
+        /// <summary>
+        /// Удалить мероприятие
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        Task<bool> DeleteEventAsync(int eventId);
     }
 }

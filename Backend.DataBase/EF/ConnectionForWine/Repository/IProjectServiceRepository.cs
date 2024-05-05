@@ -1,7 +1,7 @@
 ﻿using Core.Actions.Abstractions.DataBaseConnector;
 using Core.Models.WineRealizations;
 
-namespace DataBase.EF.ConnectionFroWine.Repository
+namespace DataBase.EF.ConnectionForWine.Repository
 {
     /// <summary>
     /// Репозиторий для модуля ProjectPage

@@ -35,6 +35,8 @@ namespace Core.Actions.WineRealizations.WineEventCalculator
                         return new BlendingEventCalculater(currentIndicator, (WineIndicator)param[0], (BasedSubstanceType)param[1], unitsCalculator);
                     throw new Exception("Некорректные параметры");
                 case WineEventTypes.Alcoholization:
+                    if (param != null && param.Count() == 1 && param[0] is float)
+                        return new AlcoholizationEventCalculater(currentIndicator, (float)param[0]);
                     return new AlcoholizationEventCalculater(currentIndicator);
                 default:
                     throw new Exception("Несущесвтующий тип события");

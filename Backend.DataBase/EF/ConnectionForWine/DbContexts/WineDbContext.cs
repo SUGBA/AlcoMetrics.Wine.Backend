@@ -1,8 +1,8 @@
 ﻿using Core.Models.WineRealizations;
-using DataBase.EF.ConnectionFroWine.Configuration;
+using DataBase.EF.ConnectionForWine.Configuration;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataBase.EF.ConnectionFroWine.DbContexts
+namespace DataBase.EF.ConnectionForWine.DbContexts
 {
     public class WineDbContext : DbContext
     {
@@ -36,6 +36,8 @@ namespace DataBase.EF.ConnectionFroWine.DbContexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=AlcoMetrics.Wine.DB;Username=postgres;Password=1749;");
+
+            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

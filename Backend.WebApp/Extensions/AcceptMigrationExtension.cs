@@ -1,4 +1,4 @@
-﻿using DataBase.EF.ConnectionFroWine.DbContexts;
+﻿using DataBase.EF.ConnectionForWine.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.Extensions
