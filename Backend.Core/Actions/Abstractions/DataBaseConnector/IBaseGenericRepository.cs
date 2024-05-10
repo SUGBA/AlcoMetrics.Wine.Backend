@@ -39,13 +39,13 @@ namespace Core.Actions.Abstractions.DataBaseConnector
         /// Добавить
         /// </summary>
         /// <param name="item"> Добавляемый элемент</param>
-        public void Add(BE item);
+        public int Add(BE item);
 
         /// <summary>
         /// Изменить
         /// </summary>
         /// <param name="item"> Изменяемый элемент </param>
-        public void Update(BE item);
+        public bool Update(BE item);
 
         /// <summary>
         /// Удалить

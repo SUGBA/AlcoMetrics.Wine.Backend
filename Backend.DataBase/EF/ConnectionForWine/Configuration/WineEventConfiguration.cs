@@ -25,6 +25,9 @@ namespace DataBase.EF.ConnectionForWine.Configuration
                 .HasMany(m => m.Ingridients)
                 .WithOne()
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(x => x.DesiredIndicatorId).IsUnique(false);
+            builder.HasIndex(x => x.ResultIndicatorId).IsUnique(false);
         }
     }
 }

@@ -35,16 +35,17 @@ namespace DataBase.EF.ConnectionForWine.DbContexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=AlcoMetrics.Wine.DB;Username=postgres;Password=1749;");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=AlcoMetrics.Wine.DB;Username=postgres;Password=1749;IncludeErrorDetail=true");
 
             optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.UseSerialColumns();
+            modelBuilder.UseIdentityAlwaysColumns();
 
             modelBuilder.ApplyConfiguration(new WineEventConfiguration());
+            modelBuilder.ApplyConfiguration(new WineUserConfiguration());
         }
     }
 }

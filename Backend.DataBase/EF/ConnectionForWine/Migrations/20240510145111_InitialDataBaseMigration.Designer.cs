@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataBase.EF.ConnectionForWine.Migrations
 {
     [DbContext(typeof(WineDbContext))]
-    [Migration("20240502170501_InitialDataMigration")]
-    partial class InitialDataMigration
+    [Migration("20240510145111_InitialDataBaseMigration")]
+    partial class InitialDataBaseMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,7 +22,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                 .HasAnnotation("ProductVersion", "6.0.26")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.UseSerialColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityAlwaysColumns(modelBuilder);
 
             modelBuilder.Entity("Core.Models.WineRealizations.AreometrDefaultValue", b =>
                 {
@@ -30,7 +30,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AreometerValue")
                         .HasColumnType("integer");
@@ -49,7 +49,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<int>("DifferenceAreometerValue")
                         .HasColumnType("integer");
@@ -71,7 +71,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<double>("AcidValue")
                         .HasColumnType("double precision");
@@ -94,7 +94,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CurrentDate")
                         .HasColumnType("timestamp with time zone");
@@ -120,7 +120,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<int>("DayId")
                         .HasColumnType("integer");
@@ -159,7 +159,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<double>("EthanolValue")
                         .HasColumnType("double precision");
@@ -187,7 +187,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<string>("IngredientName")
                         .IsRequired()
@@ -212,7 +212,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Information")
                         .IsRequired()
@@ -232,7 +232,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("StartAreometerValue")
                         .HasColumnType("integer");
@@ -257,7 +257,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<int>("EventType")
                         .HasColumnType("integer");
@@ -320,15 +320,15 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Models.WineRealizations.WineIndicator", "DesiredIndicator")
-                        .WithMany()
-                        .HasForeignKey("DesiredIndicatorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .WithOne()
+                        .HasForeignKey("Core.Models.WineRealizations.WineEvent", "DesiredIndicatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Models.WineRealizations.WineIndicator", "ResultIndicator")
-                        .WithMany()
-                        .HasForeignKey("ResultIndicatorId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .WithOne()
+                        .HasForeignKey("Core.Models.WineRealizations.WineEvent", "ResultIndicatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Core.Models.WineRealizations.WineTypicalEvent", "TypicalEvent")
                         .WithMany()
@@ -349,7 +349,8 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                 {
                     b.HasOne("Core.Models.WineRealizations.WineEvent", null)
                         .WithMany("Ingridients")
-                        .HasForeignKey("WineEventId");
+                        .HasForeignKey("WineEventId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Core.Models.WineRealizations.WineTimeLine", b =>

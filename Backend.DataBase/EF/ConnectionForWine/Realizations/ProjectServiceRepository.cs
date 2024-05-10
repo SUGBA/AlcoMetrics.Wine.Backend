@@ -19,6 +19,14 @@ namespace DataBase.EF.ConnectionForWine.Realizations
 
         public async Task AddTimeLineAsync(WineTimeLine timeLine)
         {
+            foreach (var day in timeLine.Days)
+            {
+                foreach (var evnt in day.Events)
+                {
+                    _context.Entry(evnt.TypicalEvent).State = EntityState.Unchanged;
+                }
+            }
+
             await _context.WineTimeLines.AddAsync(timeLine);
             await _context.SaveChangesAsync();
         }

@@ -33,6 +33,7 @@ namespace Core.Actions.WineRealizations.WineTimelineCorrector
                     DesiredIndicator = indicator,
                     EventType = Models.Abstractions.EventCustomTypes.System,
                     IsCompleted = false,
+                    TypicalEvent = typicalEvent,
                     TypicalEventId = typicalEvent.Id,
                 };
 

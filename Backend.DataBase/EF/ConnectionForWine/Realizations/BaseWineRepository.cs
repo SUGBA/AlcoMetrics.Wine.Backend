@@ -34,10 +34,13 @@ namespace DataBase.EF.ConnectionForWine.Realizations
             table = _context.Set<T>();
         }
 
-        public void Add(T item)
+        public int Add(T item)
         {
+            var exist = table.FirstOrDefault(x => x.Id == item.Id);
+            if (exist != null) return default(int);
             table.Add(item);
             _context.SaveChanges();
+            return item.Id;
         }
 
         public bool Delete(int id)
@@ -59,10 +62,14 @@ namespace DataBase.EF.ConnectionForWine.Realizations
             return table.FirstOrDefault(x => x.Id == id);
         }
 
-        public void Update(T item)
+        public bool Update(T item)
         {
+            var exist = table.AsNoTracking().FirstOrDefault(x => x.Id==item.Id);
+            if (exist == null) return false;
             table.Attach(item);
             _context.Entry(item).State = EntityState.Modified;
+            _context.SaveChanges();
+            return true;
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()

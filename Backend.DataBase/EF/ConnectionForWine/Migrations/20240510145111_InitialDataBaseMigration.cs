@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DataBase.EF.ConnectionForWine.Migrations
 {
-    public partial class CreateMigration : Migration
+    public partial class InitialDataBaseMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     AreometerValue = table.Column<int>(type: "integer", nullable: false),
                     SugarValue = table.Column<double>(type: "double precision", nullable: false)
                 },
@@ -29,7 +29,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     DifferenceAreometerValue = table.Column<int>(type: "integer", nullable: false),
                     SugarValue = table.Column<double>(type: "double precision", nullable: false),
                     EthanolValue = table.Column<double>(type: "double precision", nullable: false)
@@ -44,7 +44,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     GrapeVarietyName = table.Column<string>(type: "text", nullable: false),
                     SugarValue = table.Column<double>(type: "double precision", nullable: false),
                     AcidValue = table.Column<double>(type: "double precision", nullable: false)
@@ -59,7 +59,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     WortValue = table.Column<double>(type: "double precision", nullable: false),
                     SugarValue = table.Column<double>(type: "double precision", nullable: false),
                     NitrogenValue = table.Column<double>(type: "double precision", nullable: false),
@@ -76,7 +76,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     Information = table.Column<string>(type: "text", nullable: false),
                     UsedModule = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -90,7 +90,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     EventType = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -118,7 +118,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     StartAreometerValue = table.Column<int>(type: "integer", nullable: true),
                     TimeLineName = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false)
@@ -139,7 +139,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     CurrentDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     TimeLineId = table.Column<int>(type: "integer", nullable: false),
                     IndicatorId = table.Column<int>(type: "integer", nullable: false)
@@ -166,7 +166,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     EventType = table.Column<int>(type: "integer", nullable: false),
                     TypicalEventId = table.Column<int>(type: "integer", nullable: false),
                     IsCompleted = table.Column<bool>(type: "boolean", nullable: false),
@@ -187,12 +187,14 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         name: "FK_WineEvents_WineIndicators_DesiredIndicatorId",
                         column: x => x.DesiredIndicatorId,
                         principalTable: "WineIndicators",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_WineEvents_WineIndicators_ResultIndicatorId",
                         column: x => x.ResultIndicatorId,
                         principalTable: "WineIndicators",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_WineEvents_WineTypicalEvents_TypicalEventId",
                         column: x => x.TypicalEventId,
@@ -206,7 +208,7 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     WineEventId = table.Column<int>(type: "integer", nullable: true),
                     IngredientName = table.Column<string>(type: "text", nullable: false),
                     IngredientValue = table.Column<double>(type: "double precision", nullable: false)
@@ -218,7 +220,8 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         name: "FK_WineIngredient_WineEvents_WineEventId",
                         column: x => x.WineEventId,
                         principalTable: "WineEvents",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

@@ -2,6 +2,7 @@
 using AutoMapper;
 using Core.Models.WineRealizations;
 using WebApp.Extensions;
+using WebApp.Models.Response.GrapeVarieties;
 using WebApp.Models.Response.TimeLine;
 using WebApp.Models.Response.TimeLineDay;
 
@@ -45,6 +46,17 @@ namespace WebApp.Services.AutoMap.Profiles
                     $"Содержание сахара: {src.ResultIndicator!.SugarValue.ToString("F2")}",
                     $"Объем: {src.ResultIndicator!.WortValue.ToString("F2")}",
                 }));
+
+            #endregion
+
+            #region GrapeVariety
+
+            CreateMap<GrapeVariety, GrapeVarietyResponse>()
+              .ForMember(to => to.SugarValue, from => from.MapFrom(src => src.SugarValue))
+              .ForMember(to => to.GrapeVarietyName, from => from.MapFrom(src => src.GrapeVarietyName))
+              .ForMember(to => to.AcidValue, from => from.MapFrom(src => src.AcidValue))
+              .ForMember(to => to.Id, from => from.MapFrom(src => src.Id))
+              .ReverseMap();
 
             #endregion
         }
