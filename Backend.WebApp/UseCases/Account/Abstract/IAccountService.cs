@@ -8,9 +8,8 @@
         /// <summary>
         /// Создание пользователя
         /// </summary>
-        /// <param name="login"> Логин </param>
-        /// <param name="password"> Пароль </param>
+        /// <param name="id"> Id нового пользователя </param>
         /// <returns></returns>
-        Task<bool> RegisterAsync(string? login, string? password, int? id);
+        Task<bool> RegisterAsync(int id);
     }
 }

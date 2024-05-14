@@ -5,11 +5,7 @@ namespace Core.Models.WineRealizations
     /// <summary>
     /// Пользователь в виноделии
     /// </summary>
-    public class WineUser : BaseUser
+    public class WineUser : BaseUser<WineTimeLine>
     {
-        /// <summary>
-        /// Список тайм-лайнов
-        /// </summary>
-        public List<WineTimeLine> TimeLines { get; set; } = new();
     }
 }

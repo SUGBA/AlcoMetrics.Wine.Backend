@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApp.Controllers.Base;
-using WebApp.Models.Request.Account;
 using WebApp.UseCases.Account.Abstract;
 
 namespace WebApp.Controllers.WineMakerControllers
@@ -21,12 +20,12 @@ namespace WebApp.Controllers.WineMakerControllers
         /// <summary>
         /// Зарегестрировать пользователя
         /// </summary>
-        /// <param name="model"> Модель для регистрации пользователя </param>
+        /// <param name="id"> Id нового пользователя </param>
         /// <returns></returns>
-        [HttpPost("Register")]
-        public async Task<bool> Register([FromBody] RegisterViewModel model)
+        [HttpPost("Register/{id:int}")]
+        public async Task<bool> Register(int id)
         {
-            return await _accountService.RegisterAsync(model.Login, model.Password, model.UserId);
+            return await _accountService.RegisterAsync(id);
         }
     }
 }

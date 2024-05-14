@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataBase.EF.ConnectionForWine.Migrations
 {
     [DbContext(typeof(WineDbContext))]
-    [Migration("20240510145116_InitialDataMigration")]
-    partial class InitialDataMigration
+    [Migration("20240514161406_InitialDataBaseMigration")]
+    partial class InitialDataBaseMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -278,14 +278,6 @@ namespace DataBase.EF.ConnectionForWine.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

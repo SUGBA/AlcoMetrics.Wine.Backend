@@ -3,16 +3,11 @@
     /// <summary>
     /// Базовый пользователь
     /// </summary>
-    public abstract class BaseUser : BaseEntity
+    public abstract class BaseUser<TL> : BaseEntity where TL : BaseEntity
     {
         /// <summary>
-        /// Пароль
+        /// Список проектов пользователя
         /// </summary>
-        public string Password { get; set; }
-
-        /// <summary>
-        /// Логин
-        /// </summary>
-        public string Login { get; set; }
+        public List<TL> TimeLines { get; set; } = new();
     }
 }

@@ -21,26 +21,21 @@ namespace WebApp.UseCases.Account
         /// <summary>
         /// Создание пользователя
         /// </summary>
-        /// <param name="login"> Логин </param>
-        /// <param name="password"> Пароль </param>
+        /// <param name="id"> Id нового пользователя </param>
         /// <returns></returns>
-        public async Task<bool> RegisterAsync(string? login, string? password, int? id)
+        public Task<bool> RegisterAsync(int id)
         {
-            if (login == null || password == null || id == null)
-                return false;
-
-            return await Task.Run(() => Register(login, password, (int)id));
+            return Task.Run(() => Register(id));
         }
 
         /// <summary>
         /// Создание пользователя
         /// </summary>
-        /// <param name="login"> Логин </param>
-        /// <param name="password"> Пароль </param>
+        /// <param name="id"> Id нового пользователя </param>
         /// <returns></returns>
-        private bool Register(string login, string password, int id)
+        private bool Register(int id)
         {
-            var user = new WineUser() { Login = login, Password = password, Id = id };
+            var user = new WineUser() { Id = id };
             _repository.Add(user);
             return true;
         }
