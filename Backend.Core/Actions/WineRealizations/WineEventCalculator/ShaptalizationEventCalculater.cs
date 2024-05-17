@@ -13,7 +13,7 @@ namespace Core.Actions.WineRealizations.WineEventCalculator
         /// <summary>
         /// коэффициент, учитывающий соотношение объёмов воды, необходимой для получения сахарного сиропа, и исходного сусла;
         /// </summary>
-        private const float K = 0.5f;
+        private const float K = 0.3f;
 
         /// <summary>
         /// Плотность сахара Г/Л
@@ -45,7 +45,7 @@ namespace Core.Actions.WineRealizations.WineEventCalculator
 
             result.Add("Вода (Л)", waterValue);
 
-            UpdateIndicator(sugarValue, waterValue);       //Изменение показателей результирующего индикатора
+            UpdateIndicator(sugarValue, waterValue, desiredIndicator.SugarValue);       //Изменение показателей результирующего индикатора
 
             return result;
         }
@@ -95,19 +95,14 @@ namespace Core.Actions.WineRealizations.WineEventCalculator
         /// Обновить показатели результирующего индикатора
         /// </summary>
         /// <param name="sugar"></param>
-        /// <param name="watterLier"></param>
-        private void UpdateIndicator(double sugar, double watterLier)
+        /// <param name="watterLiter"></param>
+        private void UpdateIndicator(double sugar, double watterLiter, double desiredSugarValue)
         {
-            double totalSugar = ResultIndicator.SugarValue * ResultIndicator.WortValue;     //Текущий объем сахара в граммах
-
-            double resultSugarGram = totalSugar + sugar;                        //Общее колличество сахара в граммах
-            double addedWort = watterLier + sugar / p;                          //Объем добавляемого сиропа
+            double addedWort = watterLiter + sugar / p;                          //Объем добавляемого сиропа
             double resultWater = ResultIndicator.WortValue + addedWort;               //Текущий объем + доблавленная вода + объем сахара (в литрах)
 
-            double resultSugarValue = resultSugarGram / resultWater;            //Результат в Г/Л
-
             ResultIndicator.WortValue = resultWater;
-            ResultIndicator.SugarValue = resultSugarValue;
+            ResultIndicator.SugarValue = desiredSugarValue;
 
             var ethanolResult = MixingCalculator.GetContent(ResultIndicator.EthanolValue, ResultIndicator.WortValue, 0, addedWort);
 

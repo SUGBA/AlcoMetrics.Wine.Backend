@@ -117,8 +117,8 @@ namespace Tests
 
             var result = calcualtor.Calculate(desiredIndicator);
 
-            Assert.Equal(46d, Math.Round(calcualtor.ResultIndicator.SugarValue, 0));
-            Assert.Equal(15.45d, Math.Round(calcualtor.ResultIndicator.WortValue, 2));
+            Assert.Equal(50d, Math.Round(calcualtor.ResultIndicator.SugarValue, 0));
+            Assert.Equal(13.35d, Math.Round(calcualtor.ResultIndicator.WortValue, 2));
         }
 
         #endregion
@@ -240,8 +240,8 @@ namespace Tests
             var result = worker.CalculateEventIngredients(WineEventTypes.Shaptalization, desiredIndicator, currentIndicator);
 
             Assert.NotNull(result);
-            Assert.Equal(405, Math.Round(result!.First().Value, 0));
-            Assert.Equal(5, Math.Round(result!.Last().Value, 0));
+            Assert.Equal(315, Math.Round(result!.First().Value, 0));
+            Assert.Equal(3, Math.Round(result!.Last().Value, 0));
         }
 
         /// <summary>

@@ -216,7 +216,7 @@ namespace WebApp.UseCases.TimeLineDay
             var desiredDay = await _repository.GetDayWithIndicatorsAndTimeLineAsync(request.DayId, userId);
             if (desiredDay == null) return null;
             var desiredIndicator = desiredDay.Indicator;
-            desiredIndicator.EthanolValue = request.DesiredSugarValue;
+            desiredIndicator.SugarValue = request.DesiredSugarValue;
             desiredIndicator.Id = 0;
 
             var ingridients = _eventWorker.CalculateEventIngredients(WineEventTypes.Shaptalization, desiredIndicator, currentIndicator);
