@@ -105,6 +105,7 @@ namespace DataBase.EF.ConnectionForWine.Realizations
             return await _context.WineEvents
                 .AsNoTracking()
                 .Include(x => x.ResultIndicator)
+                .Include(x=>x.Ingridients)
                 .Include(x=>x.Day)
                 .ThenInclude(x => x.TimeLine)
                 .FirstOrDefaultAsync(x => x.Id == eventId && x.Day.TimeLine.UserId == userId);

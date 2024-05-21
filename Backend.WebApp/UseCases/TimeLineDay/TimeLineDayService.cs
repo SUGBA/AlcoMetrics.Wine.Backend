@@ -328,6 +328,9 @@ namespace WebApp.UseCases.TimeLineDay
             if (evn == null || evn.Day == null)
                 return false;
 
+            if (evn.Ingridients.Any(x => x.IngredientValue < 0))
+                return false;
+
             var updatedDay = evn.Day;
             var newIndicator = updatedDay.Events.First(x => x.Id == eventId).ResultIndicator;
             if (newIndicator == null)
